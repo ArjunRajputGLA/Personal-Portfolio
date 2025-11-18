@@ -37,8 +37,8 @@ export default function Contact() {
     {
       icon: Mail,
       label: 'Email',
-      value: 'arjun.rajput_cs.h23@gla.ac.in',
-      link: 'mailto:arjun.rajput_cs.h23@gla.ac.in',
+      value: 'imstorm23203@gmail.com',
+      link: 'mailto:imstorm23203@gmail.com',
       color: 'from-red-500 to-pink-500',
     },
     {
@@ -61,21 +61,21 @@ export default function Contact() {
     {
       icon: Linkedin,
       name: 'LinkedIn',
-      link: '#',
+      link: 'https://www.linkedin.com/in/imstorm23203attherategmail/',
       color: 'hover:text-blue-600',
       bg: 'hover:bg-blue-100 dark:hover:bg-blue-900/30',
     },
     {
       icon: Github,
       name: 'GitHub',
-      link: '#',
+      link: 'https://github.com/ArjunRajputGLA',
       color: 'hover:text-gray-900 dark:hover:text-white',
       bg: 'hover:bg-gray-200 dark:hover:bg-gray-700',
     },
     {
       icon: Code2,
       name: 'LeetCode',
-      link: '#',
+      link: 'https://leetcode.com/u/CodeXI/',
       color: 'hover:text-yellow-600',
       bg: 'hover:bg-yellow-100 dark:hover:bg-yellow-900/30',
     },

@@ -41,7 +41,7 @@ export default function Achievements() {
       description: 'Strong problem-solving skills demonstrated through consistent practice',
       color: 'from-green-500 to-emerald-500',
       stats: `${leetcodeCount}+ Solved`,
-      link: '#',
+      link: 'https://leetcode.com/u/CodeXI/',
     },
     {
       icon: Award,
