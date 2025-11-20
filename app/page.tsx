@@ -8,6 +8,7 @@ import Skills from '@/components/Skills';
 import Projects from '@/components/Projects';
 import Experience from '@/components/Experience';
 import Achievements from '@/components/Achievements';
+import Gallery from '@/components/Gallery';
 import Contact from '@/components/Contact';
 import FloatingBlobs from '@/components/FloatingBlobs';
 
@@ -44,6 +45,7 @@ export default function Home() {
       <Projects />
       <Experience />
       <Achievements />
+      <Gallery />
       <Contact />
     </main>
   );
