@@ -63,14 +63,14 @@ export default function About() {
           >
             <div className="prose dark:prose-invert max-w-none">
               <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
-                I'm a <strong className="text-purple-600 dark:text-purple-400">B.Tech student</strong> at{' '}
+                I&apos;m a <strong className="text-purple-600 dark:text-purple-400">B.Tech student</strong> at{' '}
                 <strong>GLA University, Mathura</strong> (graduating April 2027), specializing in{' '}
                 <strong className="text-blue-600 dark:text-blue-400">AI/ML</strong> with a focus on{' '}
                 NLP, Deep Learning, and full-stack development.
               </p>
               
               <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
-                I'm a <strong className="gradient-text-alt">curious builder</strong> passionate about creating{' '}
+                I&apos;m a <strong className="gradient-text-alt">curious builder</strong> passionate about creating{' '}
                 <strong>intelligent, scalable systems</strong> that solve real-world problems. As a{' '}
                 <strong className="text-purple-600 dark:text-purple-400">National Hackathon Winner</strong>{' '}
                 (Pan IIT Alumni Imagine 2025) and with <strong>600+ LeetCode problems</strong> solved, 
@@ -105,7 +105,7 @@ export default function About() {
                 <div>
                   <p className="font-semibold text-gray-900 dark:text-white">Fun Fact</p>
                   <p className="text-gray-600 dark:text-gray-400">
-                    When I'm not coding, I'm performing as an anchor or diving into the latest GenAI innovations
+                    When I&apos;m not coding, I&apos;m performing as an anchor or diving into the latest GenAI innovations
                   </p>
                 </div>
               </motion.div>

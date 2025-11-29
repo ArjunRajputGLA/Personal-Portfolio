@@ -91,11 +91,11 @@ export default function Contact() {
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            Let's <span className="gradient-text">Collaborate</span>
+            Let&apos;s <span className="gradient-text">Collaborate</span>
           </h2>
           <div className="w-24 h-1 bg-gradient-to-r from-purple-600 to-blue-600 mx-auto rounded-full mb-6" />
           <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-            Let's create something remarkable together
+            Let&apos;s create something remarkable together
           </p>
         </motion.div>
 
@@ -112,7 +112,7 @@ export default function Contact() {
                 Get in Touch
               </h3>
               <p className="text-gray-600 dark:text-gray-400 mb-8 leading-relaxed">
-                I'm always open to discussing new projects, creative ideas, or opportunities to be part of your visions. Feel free to reach out!
+                I&apos;m always open to discussing new projects, creative ideas, or opportunities to be part of your visions. Feel free to reach out!
               </p>
             </div>
 
