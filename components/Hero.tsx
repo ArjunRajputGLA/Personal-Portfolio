@@ -80,7 +80,7 @@ export default function Hero() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            Let's Collaborate
+            Let&apos;s Collaborate
           </motion.a>
         </motion.div>
 
