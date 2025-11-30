@@ -314,7 +314,7 @@ export default function Gallery() {
                       {filteredImages[selectedGallery].images.length} Images
                     </p>
                     <div className="h-px flex-1 bg-gradient-to-r from-transparent via-purple-600 to-transparent"></div>
-                  </div>
+                  </div>BellmanFord
                   
                   <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-3 max-w-4xl mx-auto">
                     {filteredImages[selectedGallery].images.map((img, idx) => (
