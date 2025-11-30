@@ -117,26 +117,26 @@ export default function Experience() {
   };
 
   return (
-    <section id="experience" ref={ref} className="py-20 px-4 bg-white/50 dark:bg-gray-900/50">
-      <div className="max-w-5xl mx-auto">
+    <section id="experience" ref={ref} className="py-24 px-4 bg-white dark:bg-gray-900">
+      <div className="max-w-6xl mx-auto">
         <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-          transition={{ duration: 0.6 }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.4 }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
+          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900 dark:text-white">
             Experience & <span className="gradient-text">Education</span>
           </h2>
-          <div className="w-24 h-1 bg-gradient-to-r from-purple-600 to-blue-600 mx-auto rounded-full mb-6" />
-          <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+          <div className="w-24 h-1 bg-gradient-to-r from-purple-600 to-blue-600 mx-auto rounded-full" />
+          <p className="mt-4 text-gray-600 dark:text-gray-400 text-lg">
             My professional journey and academic background
           </p>
         </motion.div>
 
         <div className="relative">
           {/* Timeline Line */}
-          <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-purple-600 via-blue-600 to-green-600" />
+          <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-purple-500 via-blue-500 to-green-500 md:-translate-x-px" />
 
           {experiences.map((exp, index) => {
             const Icon = exp.icon;
@@ -146,31 +146,30 @@ export default function Experience() {
             return (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, x: isLeft ? -50 : 50 }}
-                animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: isLeft ? -50 : 50 }}
-                transition={{ duration: 0.6, delay: index * 0.2 }}
-                className={`relative mb-12 ${
-                  isLeft ? 'md:pr-1/2 md:text-right' : 'md:pl-1/2 md:ml-auto'
-                } md:w-1/2`}
+                initial={{ opacity: 0, x: isLeft ? -30 : 30 }}
+                animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: isLeft ? -30 : 30 }}
+                transition={{ duration: 0.4, delay: index * 0.05 }}
+                className={`relative mb-10 ${
+                  isLeft ? 'md:pr-[calc(50%+30px)] md:text-right' : 'md:pl-[calc(50%+30px)]'
+                }`}
               >
                 {/* Timeline Icon */}
-                <div className={`absolute left-6 md:left-auto ${isLeft ? 'md:right-[-20px]' : 'md:left-[-20px]'} top-0 ${colorClasses.iconBg} w-10 h-10 rounded-full flex items-center justify-center border-4 border-white dark:border-gray-900 z-10`}>
-                  <Icon className="w-5 h-5 text-white" />
+                <div className={`absolute left-6 md:left-1/2 top-6 ${colorClasses.iconBg} w-12 h-12 rounded-full flex items-center justify-center border-4 border-white dark:border-gray-900 shadow-lg z-10 md:-translate-x-1/2`}>
+                  <Icon className="w-6 h-6 text-white" />
                 </div>
 
                 {/* Content Card */}
-                <motion.div
-                  whileHover={{ scale: 1.02 }}
-                  className={`ml-20 md:ml-0 p-6 ${colorClasses.bg} rounded-2xl border-2 ${colorClasses.border} border-opacity-50 hover:border-opacity-100 transition-all duration-300 shadow-lg hover:shadow-xl`}
+                <div
+                  className={`ml-24 md:ml-0 p-6 bg-white dark:bg-gray-800 rounded-2xl border-2 border-gray-200 dark:border-gray-700 hover:border-purple-500 dark:hover:border-purple-500 transition-all duration-300 shadow-lg`}
                 >
-                  <div className={`flex items-center space-x-2 mb-3 ${isLeft ? 'md:justify-end' : ''}`}>
-                    <Calendar className={`w-4 h-4 ${colorClasses.text}`} />
-                    <span className={`text-sm font-semibold ${colorClasses.text}`}>
+                  <div className={`flex items-center gap-2 mb-3 ${isLeft ? 'md:justify-end' : ''}`}>
+                    <Calendar className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+                    <span className="text-sm font-semibold text-gray-600 dark:text-gray-400">
                       {exp.period}
                     </span>
                   </div>
 
-                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
                     {exp.title}
                   </h3>
                   
@@ -178,25 +177,25 @@ export default function Experience() {
                     {exp.organization}
                   </p>
 
-                  <div className={`flex items-center space-x-2 mb-4 ${isLeft ? 'md:justify-end' : ''}`}>
+                  <div className={`flex items-center gap-2 mb-4 ${isLeft ? 'md:justify-end' : ''}`}>
                     <MapPin className="w-4 h-4 text-gray-500 dark:text-gray-400" />
                     <span className="text-sm text-gray-600 dark:text-gray-400">
                       {exp.location}
                     </span>
                   </div>
 
-                  <ul className={`space-y-2 ${isLeft ? 'md:text-right' : ''}`}>
+                  <ul className={`space-y-2 text-sm ${isLeft ? 'md:text-right' : ''}`}>
                     {exp.description.map((item, i) => (
                       <li
                         key={i}
-                        className="text-gray-700 dark:text-gray-300 flex items-start space-x-2"
+                        className={`text-gray-700 dark:text-gray-300 flex items-start gap-2 ${isLeft ? 'md:flex-row-reverse md:text-right' : ''}`}
                       >
-                        <span className={`${colorClasses.text} font-bold ${isLeft ? 'md:order-2' : ''}`}>•</span>
-                        <span className={isLeft ? 'md:order-1' : ''}>{item}</span>
+                        <span className={`${colorClasses.text} font-bold flex-shrink-0`}>•</span>
+                        <span>{item}</span>
                       </li>
                     ))}
                   </ul>
-                </motion.div>
+                </div>
               </motion.div>
             );
           })}
