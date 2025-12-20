@@ -1,26 +1,532 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* VS Code Dark Theme Colors */
+  --vscode-bg: #1e1e1e;
+  --vscode-sidebar: #252526;
+  --vscode-sidebar-border: #3c3c3c;
+  --vscode-titlebar: #323233;
+  --vscode-accent: #007acc;
+  --vscode-accent-hover: #1f8ad2;
+  --vscode-success: #4EC9B0;
+  --vscode-warning: #ce9178;
+  --vscode-error: #f48771;
+  --vscode-text: #d4d4d4;
+  --vscode-text-muted: #808080;
+  --vscode-comment: #6a9955;
+  --vscode-keyword: #569cd6;
+  --vscode-string: #ce9178;
+  --vscode-number: #b5cea8;
+  --vscode-function: #dcdcaa;
+  --vscode-variable: #9cdcfe;
+  --vscode-property: #9cdcfe;
+  --vscode-type: #4EC9B0;
+  --vscode-operator: #d4d4d4;
+  --vscode-punctuation: #d4d4d4;
+  --vscode-tab-active: #1e1e1e;
+  --vscode-tab-inactive: #2d2d2d;
+  --vscode-statusbar: #007acc;
+  --vscode-scrollbar: #424242;
+  --vscode-scrollbar-hover: #4e4e4e;
+  --vscode-selection: #264f78;
+  --vscode-line-highlight: #2a2d2e;
+  --vscode-border: #474747;
+  
+  /* Light Theme */
+  --vscode-light-bg: #ffffff;
+  --vscode-light-sidebar: #f3f3f3;
+  --vscode-light-text: #333333;
+  --vscode-light-accent: #007acc;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--vscode-bg);
+  color: var(--vscode-text);
+  font-family: 'Fira Code', 'JetBrains Mono', 'Consolas', 'Monaco', monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* Custom Scrollbar - VS Code Style */
+::-webkit-scrollbar {
+  width: 14px;
+  height: 14px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--vscode-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--vscode-scrollbar);
+  border: 3px solid var(--vscode-bg);
+  border-radius: 7px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--vscode-scrollbar-hover);
+}
+
+/* Selection */
+::selection {
+  background: var(--vscode-selection);
+  color: var(--vscode-text);
+}
+
+/* Line Numbers */
+.line-number {
+  color: var(--vscode-text-muted);
+  user-select: none;
+  text-align: right;
+  padding-right: 1rem;
+  min-width: 3rem;
+}
+
+/* Syntax Highlighting Classes */
+.syntax-keyword {
+  color: var(--vscode-keyword);
+}
+
+.syntax-string {
+  color: var(--vscode-string);
+}
+
+.syntax-number {
+  color: var(--vscode-number);
+}
+
+.syntax-function {
+  color: var(--vscode-function);
+}
+
+.syntax-variable {
+  color: var(--vscode-variable);
+}
+
+.syntax-property {
+  color: var(--vscode-property);
+}
+
+.syntax-type {
+  color: var(--vscode-type);
+}
+
+.syntax-comment {
+  color: var(--vscode-comment);
+  font-style: italic;
+}
+
+.syntax-operator {
+  color: var(--vscode-operator);
+}
+
+.syntax-punctuation {
+  color: var(--vscode-punctuation);
+}
+
+/* Code Block Base */
+.code-block {
+  background: var(--vscode-bg);
+  border: 1px solid var(--vscode-border);
+  border-radius: 4px;
+  padding: 1rem;
+  overflow-x: auto;
+  font-family: 'Fira Code', monospace;
+}
+
+/* Animations */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+  from { transform: translateX(-20px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+.cursor-blink {
+  animation: blink 1s step-end infinite;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+.animate-slide-in {
+  animation: slideIn 0.3s ease-out forwards;
+}
+
+/* Hover Effects */
+.hover-highlight:hover {
+  background: var(--vscode-line-highlight);
+}
+
+/* Focus States */
+input:focus,
+textarea:focus,
+button:focus {
+  outline: 1px solid var(--vscode-accent);
+  outline-offset: -1px;
+}
+
+/* Terminal Styles */
+.terminal {
+  background: var(--vscode-sidebar);
+  font-family: 'Fira Code', monospace;
+  font-size: 13px;
+}
+
+.terminal-prompt {
+  color: var(--vscode-success);
+}
+
+.terminal-command {
+  color: var(--vscode-text);
+}
+
+.terminal-output {
+  color: var(--vscode-text-muted);
+}
+
+/* Tooltip */
+.tooltip {
+  position: relative;
+}
+
+.tooltip::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--vscode-sidebar);
+  color: var(--vscode-text);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s, visibility 0.2s;
+  margin-left: 8px;
+  z-index: 1000;
+  border: 1px solid var(--vscode-border);
+}
+
+.tooltip:hover::after {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Breadcrumb */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 12px;
+  background: var(--vscode-bg);
+  border-bottom: 1px solid var(--vscode-sidebar-border);
+  font-size: 13px;
+  color: var(--vscode-text-muted);
+}
+
+.breadcrumb-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.breadcrumb-separator {
+  color: var(--vscode-text-muted);
+}
+
+/* File Tree */
+.file-tree-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.file-tree-item:hover {
+  background: var(--vscode-line-highlight);
+}
+
+.file-tree-item.active {
+  background: var(--vscode-selection);
+}
+
+/* JSON Tree */
+.json-key {
+  color: var(--vscode-property);
+}
+
+.json-string {
+  color: var(--vscode-string);
+}
+
+.json-number {
+  color: var(--vscode-number);
+}
+
+.json-boolean {
+  color: var(--vscode-keyword);
+}
+
+.json-bracket {
+  color: var(--vscode-punctuation);
+}
+
+/* YAML Syntax */
+.yaml-key {
+  color: var(--vscode-property);
+}
+
+.yaml-value {
+  color: var(--vscode-string);
+}
+
+.yaml-string {
+  color: var(--vscode-string);
+}
+
+/* Markdown Syntax */
+.md-h1 {
+  color: var(--vscode-keyword);
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.md-h2 {
+  color: var(--vscode-keyword);
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.md-bold {
+  color: var(--vscode-text);
+  font-weight: 600;
+}
+
+.md-italic {
+  color: var(--vscode-text);
+  font-style: italic;
+}
+
+.md-link {
+  color: var(--vscode-accent);
+  text-decoration: underline;
+}
+
+.md-list-marker {
+  color: var(--vscode-accent);
+}
+
+/* Git Log Styles */
+.git-commit-hash {
+  color: var(--vscode-warning);
+}
+
+.git-author {
+  color: var(--vscode-success);
+}
+
+.git-date {
+  color: var(--vscode-text-muted);
+}
+
+.git-message {
+  color: var(--vscode-text);
+}
+
+/* Responsive utilities */
+@media (max-width: 768px) {
+  body {
+    font-size: 13px;
+  }
+}
+
+/* Light theme support */
+.light-theme {
+  --vscode-bg: #ffffff;
+  --vscode-sidebar: #f3f3f3;
+  --vscode-sidebar-border: #e0e0e0;
+  --vscode-titlebar: #dddddd;
+  --vscode-text: #333333;
+  --vscode-text-muted: #666666;
+  --vscode-tab-active: #ffffff;
+  --vscode-tab-inactive: #ececec;
+  --vscode-line-highlight: #e8e8e8;
+  --vscode-scrollbar: #c1c1c1;
+  --vscode-scrollbar-hover: #a8a8a8;
+  --vscode-selection: #add6ff;
+  --vscode-border: #c8c8c8;
+}
+
+/* No animations mode */
+.no-animations,
+.no-animations * {
+  animation: none !important;
+  transition: none !important;
+}
+
+/* Reduced motion mode */
+.reduced-motion,
+.reduced-motion * {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+
+/* High contrast theme */
+.high-contrast {
+  --vscode-bg: #000000;
+  --vscode-sidebar: #0a0a0a;
+  --vscode-sidebar-border: #6fc3df;
+  --vscode-titlebar: #0a0a0a;
+  --vscode-accent: #6fc3df;
+  --vscode-accent-hover: #9fdfef;
+  --vscode-success: #89d185;
+  --vscode-warning: #cca700;
+  --vscode-error: #f48771;
+  --vscode-text: #ffffff;
+  --vscode-text-muted: #d4d4d4;
+  --vscode-comment: #7ca668;
+  --vscode-keyword: #569cd6;
+  --vscode-string: #ce9178;
+  --vscode-number: #b5cea8;
+  --vscode-function: #dcdcaa;
+  --vscode-variable: #9cdcfe;
+  --vscode-property: #9cdcfe;
+  --vscode-type: #4EC9B0;
+  --vscode-tab-active: #000000;
+  --vscode-tab-inactive: #0a0a0a;
+  --vscode-statusbar: #6fc3df;
+  --vscode-scrollbar: #6fc3df;
+  --vscode-scrollbar-hover: #9fdfef;
+  --vscode-selection: #264f78;
+  --vscode-line-highlight: #1a1a1a;
+  --vscode-border: #6fc3df;
+}
+
+.high-contrast * {
+  border-color: var(--vscode-border) !important;
+}
+
+/* Matrix text effect */
+.matrix-text {
+  color: #00ff00;
+  text-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00, 0 0 15px #00ff00;
+  font-family: 'Fira Code', monospace;
+}
+
+/* Glow effects */
+.glow-accent {
+  box-shadow: 0 0 10px var(--vscode-accent), 0 0 20px var(--vscode-accent);
+}
+
+.glow-success {
+  box-shadow: 0 0 10px var(--vscode-success), 0 0 20px var(--vscode-success);
+}
+
+/* Scanlines effect for retro feel */
+.scanlines::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.1) 0px,
+    rgba(0, 0, 0, 0.1) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  pointer-events: none;
+}
+
+/* Highlight for search results */
+.search-highlight {
+  background: #ffff00;
+  color: #000000;
+  padding: 0 2px;
+  border-radius: 2px;
+}
+
+/* Notification animation */
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.notification-enter {
+  animation: slideInRight 0.3s ease-out;
+}
+
+/* Minimap indicator */
+.minimap-viewport {
+  border: 1px solid var(--vscode-accent);
+  background: rgba(0, 122, 204, 0.1);
+}
+
+/* Panel transitions */
+.panel-transition {
+  transition: height 0.2s ease, width 0.2s ease;
+}
+
+/* Easter egg: Konami code celebration */
+@keyframes celebrate {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+.celebrate {
+  animation: celebrate 0.5s ease infinite;
+}
+
+/* Status bar live indicator */
+@keyframes pulse-live {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.pulse-live {
+  animation: pulse-live 1.5s ease-in-out infinite;
 }
