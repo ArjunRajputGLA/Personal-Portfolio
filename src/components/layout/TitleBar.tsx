@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Menu, Settings, Minus, Square, X, Download } from 'lucide-react';
+import { Menu, Sun, Moon, Minus, Square, X, Download } from 'lucide-react';
 
 interface TitleBarProps {
   onMenuClick: () => void;
@@ -188,7 +188,7 @@ export default function TitleBar({
           aria-label="Toggle theme"
           title={isDarkTheme ? 'Switch to Light Theme' : 'Switch to Dark Theme'}
         >
-          <Settings size={14} />
+          {isDarkTheme ? <Sun size={14} /> : <Moon size={14} />}
         </button>
 
         <button

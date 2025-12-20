@@ -2,13 +2,14 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Settings as SettingsIcon, Moon, Sun, Monitor, Type, Eye, EyeOff, Zap, Volume2, VolumeX, Accessibility } from 'lucide-react';
+import { X, Settings as SettingsIcon, Moon, Sun, Monitor, Zap, Accessibility } from 'lucide-react';
 
 interface SettingsProps {
   isOpen: boolean;
   onClose: () => void;
   settings: SettingsState;
   onSettingsChange: (settings: SettingsState) => void;
+  onOpenCommandPalette?: () => void;
 }
 
 export interface SettingsState {
@@ -16,18 +17,9 @@ export interface SettingsState {
     theme: 'dark' | 'light' | 'high-contrast';
     fontSize: number;
     fontFamily: string;
-    showLineNumbers: boolean;
-    showMinimap: boolean;
-  };
-  terminal: {
-    cursorStyle: 'block' | 'line' | 'underline';
-    cursorBlink: boolean;
-    fontSize: number;
   };
   features: {
     enableAnimations: boolean;
-    enableSoundEffects: boolean;
-    enableEasterEggs: boolean;
   };
   accessibility: {
     highContrast: boolean;
@@ -40,18 +32,9 @@ export const defaultSettings: SettingsState = {
     theme: 'dark',
     fontSize: 14,
     fontFamily: 'Fira Code',
-    showLineNumbers: true,
-    showMinimap: true,
-  },
-  terminal: {
-    cursorStyle: 'block',
-    cursorBlink: true,
-    fontSize: 12,
   },
   features: {
     enableAnimations: true,
-    enableSoundEffects: false,
-    enableEasterEggs: true,
   },
   accessibility: {
     highContrast: false,
@@ -59,8 +42,8 @@ export const defaultSettings: SettingsState = {
   },
 };
 
-export default function SettingsPanel({ isOpen, onClose, settings, onSettingsChange }: SettingsProps) {
-  const [activeTab, setActiveTab] = useState<'appearance' | 'terminal' | 'features' | 'accessibility'>('appearance');
+export default function SettingsPanel({ isOpen, onClose, settings, onSettingsChange, onOpenCommandPalette }: SettingsProps) {
+  const [activeTab, setActiveTab] = useState<'appearance' | 'features' | 'accessibility'>('appearance');
   const [localSettings, setLocalSettings] = useState<SettingsState>(settings);
 
   useEffect(() => {
@@ -85,7 +68,6 @@ export default function SettingsPanel({ isOpen, onClose, settings, onSettingsCha
 
   const tabs = [
     { id: 'appearance' as const, label: 'Appearance', icon: Sun },
-    { id: 'terminal' as const, label: 'Terminal', icon: Monitor },
     { id: 'features' as const, label: 'Features', icon: Zap },
     { id: 'accessibility' as const, label: 'Accessibility', icon: Accessibility },
   ];
@@ -102,7 +84,7 @@ export default function SettingsPanel({ isOpen, onClose, settings, onSettingsCha
             onClick={onClose}
           />
           <motion.div
-            className="fixed top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-3xl max-h-[80vh] z-50"
+            className="fixed top-[30%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-3xl max-h-[80vh] z-50"
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
@@ -202,79 +184,6 @@ export default function SettingsPanel({ isOpen, onClose, settings, onSettingsCha
                           <option value="Monaco">Monaco</option>
                         </select>
                       </div>
-
-                      {/* Toggles */}
-                      <div className="space-y-3">
-                        <label className="flex items-center justify-between">
-                          <span className="text-sm">Show Line Numbers</span>
-                          <button
-                            onClick={() => handleChange('appearance', 'showLineNumbers', !localSettings.appearance.showLineNumbers)}
-                            className={`w-12 h-6 rounded-full transition-colors ${
-                              localSettings.appearance.showLineNumbers ? 'bg-[var(--vscode-accent)]' : 'bg-[var(--vscode-border)]'
-                            }`}
-                          >
-                            <div className={`w-5 h-5 rounded-full bg-white transition-transform ${
-                              localSettings.appearance.showLineNumbers ? 'translate-x-6' : 'translate-x-0.5'
-                            }`} />
-                          </button>
-                        </label>
-                      </div>
-                    </div>
-                  )}
-
-                  {activeTab === 'terminal' && (
-                    <div className="space-y-6">
-                      <h3 className="text-lg font-medium mb-4">Terminal</h3>
-                      
-                      {/* Cursor Style */}
-                      <div>
-                        <label className="block text-sm text-[var(--vscode-text-muted)] mb-2">Cursor Style</label>
-                        <div className="flex gap-2">
-                          {(['block', 'line', 'underline'] as const).map(style => (
-                            <button
-                              key={style}
-                              onClick={() => handleChange('terminal', 'cursorStyle', style)}
-                              className={`px-4 py-2 rounded border transition-colors capitalize ${
-                                localSettings.terminal.cursorStyle === style
-                                  ? 'border-[var(--vscode-accent)] bg-[var(--vscode-accent)]/10'
-                                  : 'border-[var(--vscode-border)] hover:border-[var(--vscode-accent)]'
-                              }`}
-                            >
-                              {style}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* Terminal Font Size */}
-                      <div>
-                        <label className="block text-sm text-[var(--vscode-text-muted)] mb-2">
-                          Font Size: {localSettings.terminal.fontSize}px
-                        </label>
-                        <input
-                          type="range"
-                          min="10"
-                          max="20"
-                          value={localSettings.terminal.fontSize}
-                          onChange={(e) => handleChange('terminal', 'fontSize', parseInt(e.target.value))}
-                          className="w-full accent-[var(--vscode-accent)]"
-                        />
-                      </div>
-
-                      {/* Cursor Blink */}
-                      <label className="flex items-center justify-between">
-                        <span className="text-sm">Cursor Blink</span>
-                        <button
-                          onClick={() => handleChange('terminal', 'cursorBlink', !localSettings.terminal.cursorBlink)}
-                          className={`w-12 h-6 rounded-full transition-colors ${
-                            localSettings.terminal.cursorBlink ? 'bg-[var(--vscode-accent)]' : 'bg-[var(--vscode-border)]'
-                          }`}
-                        >
-                          <div className={`w-5 h-5 rounded-full bg-white transition-transform ${
-                            localSettings.terminal.cursorBlink ? 'translate-x-6' : 'translate-x-0.5'
-                          }`} />
-                        </button>
-                      </label>
                     </div>
                   )}
 
@@ -282,6 +191,23 @@ export default function SettingsPanel({ isOpen, onClose, settings, onSettingsCha
                     <div className="space-y-6">
                       <h3 className="text-lg font-medium mb-4">Features</h3>
                       
+                      {/* Command Palette */}
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <span className="text-sm block">Command Palette</span>
+                          <span className="text-xs text-[var(--vscode-text-muted)]">Quick access to all commands (Ctrl+P)</span>
+                        </div>
+                        <button
+                          onClick={() => {
+                            onClose();
+                            onOpenCommandPalette?.();
+                          }}
+                          className="px-3 py-1.5 text-xs bg-[var(--vscode-accent)] text-white rounded hover:bg-[var(--vscode-accent-hover)] transition-colors"
+                        >
+                          Open
+                        </button>
+                      </div>
+
                       <label className="flex items-center justify-between">
                         <div>
                           <span className="text-sm block">Enable Animations</span>
@@ -295,40 +221,6 @@ export default function SettingsPanel({ isOpen, onClose, settings, onSettingsCha
                         >
                           <div className={`w-5 h-5 rounded-full bg-white transition-transform ${
                             localSettings.features.enableAnimations ? 'translate-x-6' : 'translate-x-0.5'
-                          }`} />
-                        </button>
-                      </label>
-
-                      <label className="flex items-center justify-between">
-                        <div>
-                          <span className="text-sm block">Enable Sound Effects</span>
-                          <span className="text-xs text-[var(--vscode-text-muted)]">Subtle audio feedback</span>
-                        </div>
-                        <button
-                          onClick={() => handleChange('features', 'enableSoundEffects', !localSettings.features.enableSoundEffects)}
-                          className={`w-12 h-6 rounded-full transition-colors ${
-                            localSettings.features.enableSoundEffects ? 'bg-[var(--vscode-accent)]' : 'bg-[var(--vscode-border)]'
-                          }`}
-                        >
-                          <div className={`w-5 h-5 rounded-full bg-white transition-transform ${
-                            localSettings.features.enableSoundEffects ? 'translate-x-6' : 'translate-x-0.5'
-                          }`} />
-                        </button>
-                      </label>
-
-                      <label className="flex items-center justify-between">
-                        <div>
-                          <span className="text-sm block">Enable Easter Eggs</span>
-                          <span className="text-xs text-[var(--vscode-text-muted)]">Hidden features and surprises</span>
-                        </div>
-                        <button
-                          onClick={() => handleChange('features', 'enableEasterEggs', !localSettings.features.enableEasterEggs)}
-                          className={`w-12 h-6 rounded-full transition-colors ${
-                            localSettings.features.enableEasterEggs ? 'bg-[var(--vscode-accent)]' : 'bg-[var(--vscode-border)]'
-                          }`}
-                        >
-                          <div className={`w-5 h-5 rounded-full bg-white transition-transform ${
-                            localSettings.features.enableEasterEggs ? 'translate-x-6' : 'translate-x-0.5'
                           }`} />
                         </button>
                       </label>
@@ -379,9 +271,20 @@ export default function SettingsPanel({ isOpen, onClose, settings, onSettingsCha
 
               {/* Footer */}
               <div className="flex items-center justify-between px-4 py-3 border-t border-[var(--vscode-sidebar-border)] bg-[var(--vscode-bg)]">
-                <span className="text-xs text-[var(--vscode-text-muted)]">
-                  Settings are automatically saved
-                </span>
+                <div className="flex items-center gap-3">
+                  <span className="text-xs text-[var(--vscode-text-muted)]">
+                    Settings are automatically saved
+                  </span>
+                  <button
+                    onClick={() => {
+                      setLocalSettings(defaultSettings);
+                      onSettingsChange(defaultSettings);
+                    }}
+                    className="px-3 py-1 text-xs text-[var(--vscode-text-muted)] hover:text-[var(--vscode-text)] border border-[var(--vscode-border)] rounded hover:border-[var(--vscode-accent)] transition-colors"
+                  >
+                    Reset to Defaults
+                  </button>
+                </div>
                 <button
                   onClick={onClose}
                   className="px-4 py-1.5 bg-[var(--vscode-accent)] text-white rounded text-sm hover:bg-[var(--vscode-accent-hover)] transition-colors"

@@ -21,7 +21,6 @@ import {
   Sparkles,
   ArrowLeft,
   ChevronDown,
-  Settings,
   RotateCcw
 } from 'lucide-react';
 import { askGemini, generateMessageId, Message } from '@/lib/gemini-api';
@@ -455,18 +454,18 @@ export default function Chatbot() {
       if (line.trim().startsWith('•') || line.trim().startsWith('-')) {
         return (
           <div key={i} className="flex gap-2 ml-2">
-            <span className="text-[var(--vscode-accent)]">•</span>
-            <span dangerouslySetInnerHTML={{ __html: formattedLine.replace(/^[•-]\s*/, '') }} />
+            <span className="text-[var(--vscode-accent)] flex-shrink-0">•</span>
+            <span className="break-all" dangerouslySetInnerHTML={{ __html: formattedLine.replace(/^[•-]\s*/, '') }} />
           </div>
         );
       }
       
       // Links
       const linkRegex = /\[(.*?)\]\((.*?)\)/g;
-      formattedLine = formattedLine.replace(linkRegex, '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-[var(--vscode-accent)] hover:underline">$1</a>');
+      formattedLine = formattedLine.replace(linkRegex, '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-[var(--vscode-accent)] hover:underline break-all">$1</a>');
       
       return formattedLine ? (
-        <p key={i} dangerouslySetInnerHTML={{ __html: formattedLine }} className="mb-1" />
+        <p key={i} dangerouslySetInnerHTML={{ __html: formattedLine }} className="mb-1 break-words" style={{ wordBreak: 'break-word', overflowWrap: 'anywhere' }} />
       ) : (
         <br key={i} />
       );
@@ -542,15 +541,15 @@ export default function Chatbot() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
             onClick={() => setIsMinimized(false)}
-            className="fixed bottom-24 right-4 z-50 flex items-center gap-3 px-4 py-3 bg-[#2d2d2d] border border-[#3e3e3e] rounded-lg shadow-xl hover:border-[var(--vscode-accent)] transition-all cursor-pointer"
+            className="fixed bottom-24 right-4 z-50 flex items-center gap-3 px-4 py-3 bg-[var(--vscode-sidebar)] border border-[var(--vscode-border)] rounded-lg shadow-xl hover:border-[var(--vscode-accent)] transition-all cursor-pointer"
             aria-label="Restore Arjun AI chat"
           >
             <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[var(--vscode-accent)] to-blue-600 flex items-center justify-center">
               <Bot size={16} className="text-white" />
             </div>
             <div className="text-left">
-              <p className="text-sm font-medium text-[#d4d4d4]">Arjun.ai</p>
-              <p className="text-[10px] text-[#808080]">Click to restore</p>
+              <p className="text-sm font-medium text-[var(--vscode-text)]">Arjun.ai</p>
+              <p className="text-[10px] text-[var(--vscode-text-muted)]">Click to restore</p>
             </div>
             <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
           </motion.button>
@@ -573,13 +572,13 @@ export default function Chatbot() {
                 ? '0 20px 60px rgba(0,0,0,0.5)' 
                 : '0 8px 32px rgba(0,0,0,0.4)',
             }}
-            className="bg-[#1e1e1e] border border-[#3e3e3e] rounded-lg flex flex-col overflow-hidden"
+            className="bg-[var(--vscode-bg)] border border-[var(--vscode-border)] rounded-lg flex flex-col overflow-hidden"
           >
             {/* Header - Draggable */}
             <div
               onMouseDown={handleDragStart}
               onClick={handleHeaderClick}
-              className={`flex items-center justify-between px-3 py-2.5 bg-[#2d2d2d] border-b border-[#1e1e1e] select-none ${
+              className={`flex items-center justify-between px-3 py-2.5 bg-[var(--vscode-sidebar)] border-b border-[var(--vscode-sidebar-border)] select-none ${
                 isMaximized || isMobile ? 'cursor-default' : 'cursor-grab'
               } ${isDragging ? 'cursor-grabbing' : ''}`}
             >
@@ -587,18 +586,18 @@ export default function Chatbot() {
                 {isMobile && (
                   <button
                     onClick={(e) => { e.stopPropagation(); handleClose(); }}
-                    className="p-1.5 hover:bg-[#3e3e3e] rounded transition-colors"
+                    className="p-1.5 hover:bg-[var(--vscode-line-highlight)] rounded transition-colors"
                     title="Go back"
                     aria-label="Close chat"
                   >
-                    <ArrowLeft size={18} className="text-[#d4d4d4]" />
+                    <ArrowLeft size={18} className="text-[var(--vscode-text)]" />
                   </button>
                 )}
                 <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[var(--vscode-accent)] to-blue-600 flex items-center justify-center">
                   <Bot size={14} className="text-white" />
                 </div>
                 <div>
-                  <h3 className="font-medium text-sm text-[#d4d4d4]">Arjun.ai - Resume Assistant</h3>
+                  <h3 className="font-medium text-sm text-[var(--vscode-text)]">Arjun.ai - Resume Assistant</h3>
                   <p className="text-[10px] text-green-500 flex items-center gap-1">
                     <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
                     Online
@@ -611,7 +610,7 @@ export default function Chatbot() {
                   {/* Reset Chat */}
                   <button
                     onClick={(e) => { e.stopPropagation(); resetChat(); }}
-                    className="p-1.5 hover:bg-[#3e3e3e] rounded text-[#808080] hover:text-[#d4d4d4] transition-colors"
+                    className="p-1.5 hover:bg-[var(--vscode-line-highlight)] rounded text-[var(--vscode-text-muted)] hover:text-[var(--vscode-text)] transition-colors"
                     title="Reset chat"
                     aria-label="Reset chat"
                   >
@@ -621,7 +620,7 @@ export default function Chatbot() {
                   {/* Minimize */}
                   <button
                     onClick={(e) => { e.stopPropagation(); handleMinimize(); }}
-                    className="p-1.5 hover:bg-[#3e3e3e] rounded text-[#808080] hover:text-[#d4d4d4] transition-colors"
+                    className="p-1.5 hover:bg-[var(--vscode-line-highlight)] rounded text-[var(--vscode-text-muted)] hover:text-[var(--vscode-text)] transition-colors"
                     title="Minimize"
                     aria-label="Minimize chat"
                   >
@@ -631,7 +630,7 @@ export default function Chatbot() {
                   {/* Maximize/Restore */}
                   <button
                     onClick={(e) => { e.stopPropagation(); handleToggleMaximize(); }}
-                    className="p-1.5 hover:bg-[#3e3e3e] rounded text-[#808080] hover:text-[#d4d4d4] transition-colors"
+                    className="p-1.5 hover:bg-[var(--vscode-line-highlight)] rounded text-[var(--vscode-text-muted)] hover:text-[var(--vscode-text)] transition-colors"
                     title={isMaximized ? "Restore" : "Maximize"}
                     aria-label={isMaximized ? "Restore window" : "Maximize window"}
                   >
@@ -641,7 +640,7 @@ export default function Chatbot() {
                   {/* Close */}
                   <button
                     onClick={(e) => { e.stopPropagation(); handleClose(); }}
-                    className="p-1.5 hover:bg-red-500/20 rounded text-[#808080] hover:text-red-400 transition-colors"
+                    className="p-1.5 hover:bg-red-500/20 rounded text-[var(--vscode-text-muted)] hover:text-red-400 transition-colors"
                     title="Close"
                     aria-label="Close chat"
                   >
@@ -685,14 +684,14 @@ export default function Chatbot() {
                     </div>
 
                     {/* Message Bubble */}
-                    <div className={`max-w-[80%] ${message.role === 'user' ? 'text-right' : ''}`}>
-                      <span className="text-[10px] text-[#808080] mb-1 block">
+                    <div className={`max-w-[80%] min-w-0 ${message.role === 'user' ? 'text-right' : ''}`}>
+                      <span className="text-[10px] text-[var(--vscode-text-muted)] mb-1 block">
                         {message.role === 'user' ? 'You' : 'Arjun.ai'}
                       </span>
-                      <div className={`rounded-lg px-4 py-3 text-sm leading-relaxed ${
+                      <div className={`rounded-lg px-4 py-3 text-sm leading-relaxed break-words overflow-hidden ${
                         message.role === 'user'
                           ? 'bg-[var(--vscode-accent)] text-white rounded-br-sm'
-                          : 'bg-[#2d2d2d] text-[#d4d4d4] border border-[#3e3e3e] rounded-bl-sm'
+                          : 'bg-[var(--vscode-sidebar)] text-[var(--vscode-text)] border border-[var(--vscode-border)] rounded-bl-sm'
                       }`}>
                         {formatMessage(message.content)}
                       </div>
@@ -710,9 +709,9 @@ export default function Chatbot() {
                     <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[var(--vscode-accent)] to-blue-600 flex items-center justify-center">
                       <Bot size={16} className="text-white" />
                     </div>
-                    <div className="bg-[#2d2d2d] border border-[#3e3e3e] rounded-lg rounded-bl-sm px-4 py-3">
+                    <div className="bg-[var(--vscode-sidebar)] border border-[var(--vscode-border)] rounded-lg rounded-bl-sm px-4 py-3">
                       <div className="flex items-center gap-2">
-                        <span className="text-[#808080] text-sm">Thinking</span>
+                        <span className="text-[var(--vscode-text-muted)] text-sm">Thinking</span>
                         <Loader2 size={14} className="animate-spin text-[var(--vscode-accent)]" />
                       </div>
                     </div>
@@ -751,14 +750,14 @@ export default function Chatbot() {
             </div>
 
             {/* Quick Actions */}
-            <div className="px-3 py-2 border-t border-[#3e3e3e] bg-[#252526]">
+            <div className="px-3 py-2 border-t border-[var(--vscode-border)] bg-[var(--vscode-sidebar)]">
               <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
                 {quickActions.map((action, index) => (
                   <button
                     key={index}
                     onClick={() => handleQuickAction(action.question)}
                     disabled={isLoading}
-                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs bg-[#2d2d2d] border border-[#3e3e3e] rounded-full hover:border-[var(--vscode-accent)] hover:text-[var(--vscode-accent)] transition-colors whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs bg-[var(--vscode-bg)] border border-[var(--vscode-border)] rounded-full hover:border-[var(--vscode-accent)] hover:text-[var(--vscode-accent)] transition-colors whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <action.icon size={12} />
                     {action.label}
@@ -768,7 +767,7 @@ export default function Chatbot() {
             </div>
 
             {/* Input Area */}
-            <form onSubmit={handleSubmit} className="p-3 border-t border-[#3e3e3e] bg-[#252526]">
+            <form onSubmit={handleSubmit} className="p-3 border-t border-[var(--vscode-border)] bg-[var(--vscode-sidebar)]">
               <div className="flex gap-2 items-end">
                 <textarea
                   ref={inputRef}
@@ -778,7 +777,7 @@ export default function Chatbot() {
                   placeholder="Ask me anything about Arjun..."
                   disabled={isLoading}
                   rows={1}
-                  className="flex-1 px-4 py-2.5 bg-[#1e1e1e] border border-[#3e3e3e] rounded-lg text-sm text-[#d4d4d4] placeholder-[#808080] focus:outline-none focus:border-[var(--vscode-accent)] disabled:opacity-50 resize-none transition-colors"
+                  className="flex-1 px-4 py-2.5 bg-[var(--vscode-bg)] border border-[var(--vscode-border)] rounded-lg text-sm text-[var(--vscode-text)] placeholder-[var(--vscode-text-muted)] focus:outline-none focus:border-[var(--vscode-accent)] disabled:opacity-50 resize-none transition-colors"
                   style={{ maxHeight: '120px' }}
                   onInput={(e) => {
                     const target = e.target as HTMLTextAreaElement;
@@ -792,7 +791,7 @@ export default function Chatbot() {
                   className={`px-4 py-2.5 rounded-lg font-medium text-sm flex items-center gap-2 transition-all ${
                     inputValue.trim() && !isLoading
                       ? 'bg-[var(--vscode-accent)] text-white hover:opacity-90'
-                      : 'bg-[#3e3e3e] text-[#808080] cursor-not-allowed'
+                      : 'bg-[var(--vscode-border)] text-[var(--vscode-text-muted)] cursor-not-allowed'
                   }`}
                   title="Send message"
                   aria-label="Send message"
@@ -807,19 +806,11 @@ export default function Chatbot() {
             </form>
 
             {/* Footer */}
-            <div className="px-3 py-2 border-t border-[#3e3e3e] bg-[#2d2d2d] flex items-center justify-between text-[10px] text-[#808080]">
+            <div className="px-3 py-2 border-t border-[var(--vscode-border)] bg-[var(--vscode-sidebar)] flex items-center justify-center text-[10px] text-[var(--vscode-text-muted)]">
               <span className="flex items-center gap-1">
                 <Sparkles size={10} />
                 Powered by Google Gemini AI
               </span>
-              <button
-                className="flex items-center gap-1 hover:text-[#d4d4d4] transition-colors"
-                title="Settings"
-                aria-label="Settings"
-              >
-                <Settings size={10} />
-                Settings
-              </button>
             </div>
 
             {/* Resize Handle */}
@@ -839,8 +830,8 @@ export default function Chatbot() {
                     d="M20,0 L20,20 L0,20 Z" 
                     className="fill-[var(--vscode-accent)]/20 group-hover:fill-[var(--vscode-accent)]/40 transition-colors" 
                   />
-                  <line x1="14" y1="20" x2="20" y2="14" className="stroke-[#808080] group-hover:stroke-[var(--vscode-accent)]" strokeWidth="1" />
-                  <line x1="17" y1="20" x2="20" y2="17" className="stroke-[#808080] group-hover:stroke-[var(--vscode-accent)]" strokeWidth="1" />
+                  <line x1="14" y1="20" x2="20" y2="14" className="stroke-[var(--vscode-text-muted)] group-hover:stroke-[var(--vscode-accent)]" strokeWidth="1" />
+                  <line x1="17" y1="20" x2="20" y2="17" className="stroke-[var(--vscode-text-muted)] group-hover:stroke-[var(--vscode-accent)]" strokeWidth="1" />
                 </svg>
               </div>
             )}
@@ -854,19 +845,19 @@ export default function Chatbot() {
           width: 10px;
         }
         .chatbot-scroll::-webkit-scrollbar-track {
-          background: #1e1e1e;
+          background: var(--vscode-bg);
         }
         .chatbot-scroll::-webkit-scrollbar-thumb {
-          background: #424242;
+          background: var(--vscode-scrollbar);
           border-radius: 5px;
-          border: 2px solid #1e1e1e;
+          border: 2px solid var(--vscode-bg);
         }
         .chatbot-scroll::-webkit-scrollbar-thumb:hover {
-          background: #4f4f4f;
+          background: var(--vscode-scrollbar-hover);
         }
         .chatbot-scroll {
           scrollbar-width: thin;
-          scrollbar-color: #424242 #1e1e1e;
+          scrollbar-color: var(--vscode-scrollbar) var(--vscode-bg);
         }
         .scrollbar-hide::-webkit-scrollbar {
           display: none;

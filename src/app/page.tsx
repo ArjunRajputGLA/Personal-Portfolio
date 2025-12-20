@@ -85,6 +85,11 @@ function PortfolioContent() {
           document.documentElement.classList.add('reduced-motion');
         }
         
+        // Apply animations setting
+        if (parsed.features?.enableAnimations === false) {
+          document.documentElement.classList.add('no-animations');
+        }
+        
         // Apply font family
         if (parsed.appearance?.fontFamily) {
           document.documentElement.style.setProperty('--font-family', parsed.appearance.fontFamily);
@@ -230,6 +235,7 @@ function PortfolioContent() {
   };
 
   const handleSettingsChange = (newSettings: SettingsState) => {
+    const oldSettings = settings;
     setSettings(newSettings);
     localStorage.setItem('portfolio-settings', JSON.stringify(newSettings));
     
@@ -257,8 +263,35 @@ function PortfolioContent() {
       document.documentElement.classList.remove('reduced-motion');
     }
     
+    // Apply animations setting
+    if (!newSettings.features.enableAnimations) {
+      document.documentElement.classList.add('no-animations');
+    } else {
+      document.documentElement.classList.remove('no-animations');
+    }
+    
     // Apply font family
     document.documentElement.style.setProperty('--font-family', newSettings.appearance.fontFamily);
+    
+    // Show notifications for specific setting changes
+    if (oldSettings.appearance.theme !== newSettings.appearance.theme) {
+      addNotification({ type: 'info', message: `Theme changed to ${newSettings.appearance.theme}` });
+    }
+    if (oldSettings.appearance.fontSize !== newSettings.appearance.fontSize) {
+      addNotification({ type: 'info', message: `Font size: ${newSettings.appearance.fontSize}px` });
+    }
+    if (oldSettings.appearance.fontFamily !== newSettings.appearance.fontFamily) {
+      addNotification({ type: 'info', message: `Font: ${newSettings.appearance.fontFamily}` });
+    }
+    if (oldSettings.features.enableAnimations !== newSettings.features.enableAnimations) {
+      addNotification({ type: 'info', message: `Animations ${newSettings.features.enableAnimations ? 'enabled' : 'disabled'}` });
+    }
+    if (oldSettings.accessibility.reducedMotion !== newSettings.accessibility.reducedMotion) {
+      addNotification({ type: 'info', message: `Reduced motion ${newSettings.accessibility.reducedMotion ? 'enabled' : 'disabled'}` });
+    }
+    if (oldSettings.accessibility.highContrast !== newSettings.accessibility.highContrast) {
+      addNotification({ type: 'info', message: `High contrast ${newSettings.accessibility.highContrast ? 'enabled' : 'disabled'}` });
+    }
   };
 
   // Close side panels when another opens
@@ -404,6 +437,7 @@ function PortfolioContent() {
         onClose={() => setSettingsOpen(false)}
         settings={settings}
         onSettingsChange={handleSettingsChange}
+        onOpenCommandPalette={() => setCommandPaletteOpen(true)}
       />
 
       {/* Keyboard Shortcuts */}
