@@ -80,7 +80,7 @@ const experiences: Experience[] = [
     organization: 'Sacred Heart Convent Hr. Sec. School, Mathura',
     location: 'Mathura, UP',
     date: 'April 2021',
-    duration: '2008 - 2023',
+    duration: '2008 - 2021',
     type: 'education',
     icon: '🎓',
     details: [
