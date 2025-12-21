@@ -81,6 +81,7 @@ const explorerFiles = [
     children: [
       { name: 'journey', type: 'folder', section: 'gallery', children: [] },
       { name: 'photos', type: 'folder', section: 'gallery', children: [] },
+      { name: 'certificates', type: 'folder', section: 'gallery', children: [] },
     ]
   },
   {
@@ -389,7 +390,7 @@ export default function ActivityBar({
       {isCollapsed && (
         <button
           onClick={onToggleCollapse}
-          className="fixed left-[56px] top-[38px] z-40 p-1.5 bg-[var(--vscode-sidebar)] border border-[var(--vscode-border)] rounded hover:bg-[var(--vscode-line-highlight)] transition-colors hidden md:flex items-center justify-center"
+          className="fixed left-[8px] top-[42px] z-40 p-1.5 bg-[var(--vscode-sidebar)] border border-[var(--vscode-border)] rounded hover:bg-[var(--vscode-line-highlight)] transition-colors hidden md:flex items-center justify-center"
           title="Expand Sidebar (Ctrl+B)"
           aria-label="Expand Sidebar"
         >

@@ -40,27 +40,29 @@ const projects: Project[] = [
     id: 'no-code-backend',
     title: 'NO CODE BACKEND',
     fileName: 'no_code_backend.tsx',
+    status: '🚀 Featured in SatHack Hackathon',
     category: ['AI/ML', 'Full-Stack'],
     description: 'AI-assisted visual platform that empowers users to design, validate, and export production-ready backend systems through intuitive drag-and-drop workflows.',
     tech: ['AI', 'Visual Programming', 'Backend Development'],
     links: {
       github: 'https://github.com/ArjunRajputGLA'
     },
-    year: 2025
+    year: 2025,
+    featured: true
   },
   {
-    id: 'article',
-    title: 'Article Analyser',
-    fileName: 'article_analyser.py',
-    status: '🎓 Intel UNNATI 2024',
-    category: ['AI/ML'],
-    description: 'Intel UNNATI Programme 2024 project for analyzing articles using NLP and Gemini API.',
-    tech: ['Python', 'NLP', 'Gemini API', 'Streamlit'],
+    id: 'fluxor',
+    title: 'FLUXOR - AI File Manager',
+    fileName: 'fluxor_file_manager.js',
+    status: '🌍 Featured in Global HR Summit',
+    category: ['Desktop', 'AI'],
+    description: 'Application to manage system files efficiently using AI-powered features.',
+    tech: ['Electron.js', 'AI', 'File System APIs'],
     links: {
-      live: 'https://article-analyzer-via-gemini-weshallworkwithease.streamlit.app/',
       github: 'https://github.com/ArjunRajputGLA'
     },
-    year: 2024
+    year: 2024,
+    featured: true
   },
   {
     id: 'smart-classroom',
@@ -88,24 +90,26 @@ const projects: Project[] = [
     year: 2024
   },
   {
+    id: 'article',
+    title: 'Article Analyser',
+    fileName: 'article_analyser.py',
+    status: '🎓 Intel UNNATI 2024',
+    category: ['AI/ML'],
+    description: 'Intel UNNATI Programme 2024 project for analyzing articles using NLP and Gemini API.',
+    tech: ['Python', 'NLP', 'Gemini API', 'Streamlit'],
+    links: {
+      live: 'https://article-analyzer-via-gemini-weshallworkwithease.streamlit.app/',
+      github: 'https://github.com/ArjunRajputGLA'
+    },
+    year: 2024
+  },
+  {
     id: 'jarvis',
     title: 'J.A.R.V.I.S Arena',
     fileName: 'jarvis_arena.jsx',
     category: ['Full-Stack', 'Gaming'],
     description: 'Robust gaming website and playground that provides amazing experience to users.',
     tech: ['JavaScript', 'React.js', 'Gaming'],
-    links: {
-      github: 'https://github.com/ArjunRajputGLA'
-    },
-    year: 2024
-  },
-  {
-    id: 'fluxor',
-    title: 'FLUXOR - AI File Manager',
-    fileName: 'fluxor_file_manager.js',
-    category: ['Desktop', 'AI'],
-    description: 'Application to manage system files efficiently using AI-powered features.',
-    tech: ['Electron.js', 'AI', 'File System APIs'],
     links: {
       github: 'https://github.com/ArjunRajputGLA'
     },

@@ -103,6 +103,7 @@ export default function HeroSection() {
       content: (
         <>
           <span className="ml-8 syntax-string">&quot;💻 700+ LeetCode Solved&quot;</span>
+          <span className="syntax-punctuation">,</span>
         </>
       ), 
       delay: 800 
@@ -111,20 +112,29 @@ export default function HeroSection() {
       lineNumber: 10, 
       content: (
         <>
-          <span className="ml-4 syntax-punctuation">]</span>
-          <span className="syntax-punctuation">,</span>
+          <span className="ml-8 syntax-string">&quot;🎖️ Recognition for CP & External Participation&quot;</span>
         </>
       ), 
       delay: 900 
     },
     { 
       lineNumber: 11, 
-      content: <span className="syntax-punctuation">{'};'}</span>, 
+      content: (
+        <>
+          <span className="ml-4 syntax-punctuation">]</span>
+          <span className="syntax-punctuation">,</span>
+        </>
+      ), 
       delay: 1000 
     },
-    { lineNumber: 12, content: '', delay: 1100 },
     { 
-      lineNumber: 13, 
+      lineNumber: 12, 
+      content: <span className="syntax-punctuation">{'};'}</span>, 
+      delay: 1100 
+    },
+    { lineNumber: 13, content: '', delay: 1200 },
+    { 
+      lineNumber: 14, 
       content: (
         <>
           <span className="syntax-keyword">export default </span>
@@ -132,7 +142,7 @@ export default function HeroSection() {
           <span className="syntax-punctuation">;</span>
         </>
       ), 
-      delay: 1200 
+      delay: 1300 
     },
   ];
 
