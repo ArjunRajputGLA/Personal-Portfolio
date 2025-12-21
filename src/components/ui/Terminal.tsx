@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Terminal as TerminalIcon, 
@@ -295,8 +295,17 @@ export default function Terminal({ isOpen, onToggle, onNavigate, onThemeToggle, 
     message: ''
   });
   const [matrixActive, setMatrixActive] = useState(false);
-  const [suggestions, setSuggestions] = useState<string[]>([]);
   const [selectedSuggestion, setSelectedSuggestion] = useState(0);
+  
+  // Pre-generate random values for matrix rain effect (using useState to avoid impure render)
+  const [matrixRainData] = useState(() => 
+    [...Array(50)].map(() => ({
+      left: Math.random() * 100,
+      duration: 2 + Math.random() * 3,
+      delay: Math.random() * 2,
+      char: String.fromCharCode(0x30A0 + Math.random() * 96)
+    }))
+  );
   
   // Tutorial state
   const [showWelcomeModal, setShowWelcomeModal] = useState(false);
@@ -306,7 +315,12 @@ export default function Terminal({ isOpen, onToggle, onNavigate, onThemeToggle, 
   const [commandCount, setCommandCount] = useState(0);
   const [showHintBubble, setShowHintBubble] = useState(false);
   const [hintBubbleMessage, setHintBubbleMessage] = useState('');
-  const [hasCompletedTutorial, setHasCompletedTutorial] = useState(false);
+  const [hasCompletedTutorial, setHasCompletedTutorial] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('terminal-tutorial-completed') === 'true';
+    }
+    return false;
+  });
   const [showCompletionModal, setShowCompletionModal] = useState(false);
   
   const inputRef = useRef<HTMLInputElement>(null);
@@ -328,9 +342,7 @@ export default function Terminal({ isOpen, onToggle, onNavigate, onThemeToggle, 
       const tutorialCompleted = localStorage.getItem('terminal-tutorial-completed');
       const tutorialSkipped = localStorage.getItem('terminal-tutorial-skipped');
       
-      if (tutorialCompleted === 'true') {
-        setHasCompletedTutorial(true);
-      } else if (tutorialSkipped !== 'true' && tutorialCompleted !== 'true') {
+      if (tutorialSkipped !== 'true' && tutorialCompleted !== 'true') {
         // First time - show welcome modal after a short delay
         const timer = setTimeout(() => {
           setShowWelcomeModal(true);
@@ -354,18 +366,16 @@ export default function Terminal({ isOpen, onToggle, onNavigate, onThemeToggle, 
     }
   }, [isOpen, isMinimized]);
 
-  // Handle autocomplete suggestions
-  useEffect(() => {
+  // Compute autocomplete suggestions as derived state
+  const suggestions = useMemo(() => {
     if (currentInput && !contactForm.active) {
       const matches = allCommands.filter(cmd => 
         cmd.toLowerCase().startsWith(currentInput.toLowerCase())
       );
-      setSuggestions(matches.slice(0, 5));
-      setSelectedSuggestion(0);
-    } else {
-      setSuggestions([]);
+      return matches.slice(0, 5);
     }
-  }, [currentInput, contactForm.active]);
+    return [];
+  }, [currentInput, contactForm.active, allCommands]);
 
   const addLine = useCallback((type: TerminalLine['type'], content: string, clickable?: boolean, command?: string) => {
     const newLine: TerminalLine = {
@@ -485,6 +495,47 @@ export default function Terminal({ isOpen, onToggle, onNavigate, onThemeToggle, 
       addLine('success', `✓ Navigating to ${section} section...`);
     }
   };
+
+  const handleContactFormInput = useCallback((input: string) => {
+    switch (contactForm.step) {
+      case 'name':
+        setContactForm(prev => ({ ...prev, name: input, step: 'email' }));
+        addLine('input', `> ${input}`);
+        addLine('output', 'Enter your email:');
+        break;
+      case 'email':
+        if (input.includes('@')) {
+          setContactForm(prev => ({ ...prev, email: input, step: 'message' }));
+          addLine('input', `> ${input}`);
+          addLine('output', 'Enter your message:');
+        } else {
+          addLine('error', 'Please enter a valid email address:');
+        }
+        break;
+      case 'message':
+        setContactForm(prev => ({ ...prev, message: input, step: 'confirm' }));
+        addLine('input', `> ${input}`);
+        addLine('output', 'Send message? (y/n):');
+        break;
+      case 'confirm':
+        if (input.toLowerCase() === 'y' || input.toLowerCase() === 'yes') {
+          addLine('input', `> ${input}`);
+          addLine('info', '');
+          addLine('success', '✓ Message sent successfully!');
+          addLine('success', '📬 You\'ll hear back within 24 hours.');
+          addLine('info', '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+          addLine('info', '');
+          if (onNotification) {
+            onNotification('Message sent successfully! 📬', 'success');
+          }
+        } else {
+          addLine('input', `> ${input}`);
+          addLine('info', 'Message cancelled.');
+        }
+        setContactForm({ active: false, step: 'name', name: '', email: '', message: '' });
+        break;
+    }
+  }, [contactForm.step, addLine, onNotification]);
 
   const processCommand = useCallback(async (cmd: string) => {
     const trimmedCmd = cmd.trim().toLowerCase();
@@ -823,9 +874,8 @@ export default function Terminal({ isOpen, onToggle, onNavigate, onThemeToggle, 
           addLine('info', '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
           addLine('output', `🐙 GitHub:    ${socialLinks.github}`);
           addLine('output', `💼 LinkedIn:  ${socialLinks.linkedin}`);
-          addLine('output', `🐦 Twitter:   ${socialLinks.twitter}`);
+          addLine('output', `💻 LeetCode:  ${socialLinks.leetcode}`);
           addLine('output', `📧 Email:     ${socialLinks.email}`);
-          addLine('output', `🌐 Portfolio: ${socialLinks.portfolio}`);
           addLine('info', '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
           addLine('info', '');
         }
@@ -1159,54 +1209,12 @@ export default function Terminal({ isOpen, onToggle, onNavigate, onThemeToggle, 
           showContextualHint('💡 Tip: Type "tutorial" for a guided tour!');
         }
     }
-  }, [addLine, contactForm.active, commandHistory, handleNavigate, onThemeToggle, onToggle, onNotification, tutorialActive, tutorialStep, validateTutorialCommand, advanceTutorial, commandCount, hasCompletedTutorial, showContextualHint, allCommands, showQuickRef, startTutorial, resetTutorial, onMatrixActivate]);
-
-  const handleContactFormInput = (input: string) => {
-    switch (contactForm.step) {
-      case 'name':
-        setContactForm(prev => ({ ...prev, name: input, step: 'email' }));
-        addLine('input', `> ${input}`);
-        addLine('output', 'Enter your email:');
-        break;
-      case 'email':
-        if (input.includes('@')) {
-          setContactForm(prev => ({ ...prev, email: input, step: 'message' }));
-          addLine('input', `> ${input}`);
-          addLine('output', 'Enter your message:');
-        } else {
-          addLine('error', 'Please enter a valid email address:');
-        }
-        break;
-      case 'message':
-        setContactForm(prev => ({ ...prev, message: input, step: 'confirm' }));
-        addLine('input', `> ${input}`);
-        addLine('output', 'Send message? (y/n):');
-        break;
-      case 'confirm':
-        if (input.toLowerCase() === 'y' || input.toLowerCase() === 'yes') {
-          addLine('input', `> ${input}`);
-          addLine('info', '');
-          addLine('success', '✓ Message sent successfully!');
-          addLine('success', '📬 You\'ll hear back within 24 hours.');
-          addLine('info', '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-          addLine('info', '');
-          if (onNotification) {
-            onNotification('Message sent successfully! 📬', 'success');
-          }
-        } else {
-          addLine('input', `> ${input}`);
-          addLine('info', 'Message cancelled.');
-        }
-        setContactForm({ active: false, step: 'name', name: '', email: '', message: '' });
-        break;
-    }
-  };
+  }, [addLine, contactForm.active, commandHistory, handleNavigate, onThemeToggle, onToggle, onNotification, tutorialActive, tutorialStep, validateTutorialCommand, advanceTutorial, commandCount, hasCompletedTutorial, showContextualHint, allCommands, showQuickRef, startTutorial, resetTutorial, onMatrixActivate, handleContactFormInput]);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       processCommand(currentInput);
       setCurrentInput('');
-      setSuggestions([]);
     } else if (e.key === 'ArrowUp') {
       e.preventDefault();
       if (suggestions.length > 0) {
@@ -1232,10 +1240,8 @@ export default function Terminal({ isOpen, onToggle, onNavigate, onThemeToggle, 
       e.preventDefault();
       if (suggestions.length > 0) {
         setCurrentInput(suggestions[selectedSuggestion]);
-        setSuggestions([]);
       }
     } else if (e.key === 'Escape') {
-      setSuggestions([]);
       if (contactForm.active) {
         setContactForm({ active: false, step: 'name', name: '', email: '', message: '' });
         addLine('info', 'Contact form cancelled.');
@@ -1604,20 +1610,20 @@ export default function Terminal({ isOpen, onToggle, onNavigate, onThemeToggle, 
         {/* Matrix Rain Effect */}
         {matrixActive && (
           <div className="absolute inset-0 overflow-hidden pointer-events-none z-50">
-            {[...Array(50)].map((_, i) => (
+            {matrixRainData.map((data, i) => (
               <motion.div
                 key={i}
                 className="absolute text-green-500 font-mono text-sm"
-                style={{ left: `${Math.random() * 100}%` }}
+                style={{ left: `${data.left}%` }}
                 initial={{ y: -20, opacity: 1 }}
                 animate={{ y: '100vh', opacity: [1, 1, 0] }}
                 transition={{ 
-                  duration: 2 + Math.random() * 3, 
+                  duration: data.duration, 
                   repeat: Infinity, 
-                  delay: Math.random() * 2 
+                  delay: data.delay 
                 }}
               >
-                {String.fromCharCode(0x30A0 + Math.random() * 96)}
+                {data.char}
               </motion.div>
             ))}
           </div>
@@ -1748,7 +1754,6 @@ export default function Terminal({ isOpen, onToggle, onNavigate, onThemeToggle, 
                     }`}
                     onClick={() => {
                       setCurrentInput(suggestion);
-                      setSuggestions([]);
                       inputRef.current?.focus();
                     }}
                   >
