@@ -254,7 +254,7 @@ export default function ProjectsSection() {
                   className="font-mono text-sm"
                 >
                   {/* File Header Comment */}
-                  <div className="syntax-comment mb-4">// {selectedProject.fileName}</div>
+                  <div className="syntax-comment mb-4">{`// ${selectedProject.fileName}`}</div>
 
                   {/* Project as Code */}
                   <div className="space-y-1">
@@ -471,6 +471,7 @@ export default function ProjectsSection() {
                 <button
                   onClick={() => setShowModal(false)}
                   className="p-1 hover:bg-[var(--vscode-line-highlight)] rounded"
+                  aria-label="Close modal"
                 >
                   <X size={16} />
                 </button>

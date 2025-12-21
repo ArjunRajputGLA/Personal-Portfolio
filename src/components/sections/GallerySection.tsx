@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronRight, ChevronDown, FolderOpen, Folder, Image, X, ChevronLeft, Award, Play, Pause } from 'lucide-react';
+import { ChevronRight, ChevronDown, FolderOpen, Folder, Image, X, ChevronLeft, Award, Play, Pause, FastForward, Rewind } from 'lucide-react';
 
 interface GalleryImage {
   id: string;
@@ -82,20 +82,31 @@ export default function GallerySection() {
   const [isCarouselPaused, setIsCarouselPaused] = useState(false);
   const carouselRef = useRef<HTMLDivElement>(null);
   const [carouselPosition, setCarouselPosition] = useState(0);
+  const [carouselSpeed, setCarouselSpeed] = useState(1); // Speed multiplier: 0.5x, 1x, 2x
 
   // Auto-scroll carousel
   useEffect(() => {
     if (isCarouselPaused) return;
     
+    const baseInterval = 14; // Base interval in ms
     const interval = setInterval(() => {
       setCarouselPosition(prev => {
         const maxScroll = certificates.length * 320; // card width + gap
-        return prev >= maxScroll ? 0 : prev + 1;
+        return prev >= maxScroll ? 0 : prev + carouselSpeed;
       });
-    }, 14);
+    }, baseInterval);
 
     return () => clearInterval(interval);
-  }, [isCarouselPaused]);
+  }, [isCarouselPaused, carouselSpeed]);
+
+  // Speed control functions
+  const decreaseSpeed = () => {
+    setCarouselSpeed(prev => Math.max(0.5, prev - 0.5));
+  };
+
+  const increaseSpeed = () => {
+    setCarouselSpeed(prev => Math.min(3, prev + 0.5));
+  };
 
   const toggleFolder = (folder: string) => {
     setExpandedFolders(prev => {
@@ -324,17 +335,41 @@ export default function GallerySection() {
               <Award className="text-[var(--vscode-warning)]" size={18} />
               <span className="text-xs text-[var(--vscode-text-muted)]">media/certificates/ — Certifications & Achievements</span>
             </div>
-            <button
-              onClick={() => setIsCarouselPaused(!isCarouselPaused)}
-              className="p-1.5 hover:bg-[var(--vscode-line-highlight)] rounded transition-colors"
-              title={isCarouselPaused ? 'Play carousel' : 'Pause carousel'}
-            >
-              {isCarouselPaused ? (
-                <Play size={14} className="text-[var(--vscode-text-muted)]" />
-              ) : (
-                <Pause size={14} className="text-[var(--vscode-text-muted)]" />
-              )}
-            </button>
+            <div className="flex items-center gap-1">
+              {/* Speed Control */}
+              <button
+                onClick={decreaseSpeed}
+                disabled={carouselSpeed <= 0.5}
+                className="p-1.5 hover:bg-[var(--vscode-line-highlight)] rounded transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                title="Slow down"
+              >
+                <Rewind size={14} className="text-[var(--vscode-text-muted)]" />
+              </button>
+              <span className="text-xs text-[var(--vscode-text-muted)] min-w-[32px] text-center">
+                {carouselSpeed}x
+              </span>
+              <button
+                onClick={increaseSpeed}
+                disabled={carouselSpeed >= 3}
+                className="p-1.5 hover:bg-[var(--vscode-line-highlight)] rounded transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                title="Speed up"
+              >
+                <FastForward size={14} className="text-[var(--vscode-text-muted)]" />
+              </button>
+              {/* Play/Pause */}
+              <div className="w-px h-4 bg-[var(--vscode-border)] mx-1" />
+              <button
+                onClick={() => setIsCarouselPaused(!isCarouselPaused)}
+                className="p-1.5 hover:bg-[var(--vscode-line-highlight)] rounded transition-colors"
+                title={isCarouselPaused ? 'Play carousel' : 'Pause carousel'}
+              >
+                {isCarouselPaused ? (
+                  <Play size={14} className="text-[var(--vscode-text-muted)]" />
+                ) : (
+                  <Pause size={14} className="text-[var(--vscode-text-muted)]" />
+                )}
+              </button>
+            </div>
           </div>
 
           {/* Carousel Container */}
