@@ -43,6 +43,7 @@ const certificates: Certificate[] = [
   { id: 'cert14', name: 'Neural Networks and Deep Learning', issuer: 'Coursera - DeepLearning.AI', date: '2024', skills: ['Neural Networks', 'Deep Learning', 'TensorFlow'], fileName: 'Neural Networks and Deep Learning.pdf', fileType: 'pdf' },
   { id: 'cert15', name: 'Pan IIT Imagine 2025', issuer: 'Pan IIT', date: '2025', skills: ['Hackathon', 'Innovation', 'Team Collaboration'], fileName: 'Pan IIT Imagine 2025 (Participation Certificate).pdf', fileType: 'pdf', featured: true },
   { id: 'cert16', name: 'SatHack Hackathon', issuer: 'SatHack', date: '2025', skills: ['Hackathon', 'Problem Solving', 'Innovation'], fileName: 'SatHack Hackathon Participation Certificate.pdf', fileType: 'pdf' },
+  { id: 'cert17', name: 'Acmegrade Data Science Internship', issuer: 'Acmegrade', date: '2024', credentialId: 'AGI24010375', skills: ['Data Science', 'Machine Learning', 'Data Analysis'], fileName: 'Acmegrade Internship Certificate.png', fileType: 'png' },
 ] as (Certificate & { featured?: boolean })[];
 
 const galleryImages: GalleryImage[] = [
