@@ -81,6 +81,7 @@ export default function GallerySection() {
   const [selectedCertificate, setSelectedCertificate] = useState<Certificate | null>(null);
   const [certificateLightboxOpen, setCertificateLightboxOpen] = useState(false);
   const [isCarouselPaused, setIsCarouselPaused] = useState(false);
+  const [isManuallyPaused, setIsManuallyPaused] = useState(false); // Track if paused via button
   const carouselRef = useRef<HTMLDivElement>(null);
   const [carouselPosition, setCarouselPosition] = useState(0);
   const [carouselSpeed, setCarouselSpeed] = useState(1); // Speed multiplier: 0.5x, 1x, 2x
@@ -360,7 +361,11 @@ export default function GallerySection() {
               {/* Play/Pause */}
               <div className="w-px h-4 bg-[var(--vscode-border)] mx-1" />
               <button
-                onClick={() => setIsCarouselPaused(!isCarouselPaused)}
+                onClick={() => {
+                  const newPausedState = !isCarouselPaused;
+                  setIsCarouselPaused(newPausedState);
+                  setIsManuallyPaused(newPausedState);
+                }}
                 className="p-1.5 hover:bg-[var(--vscode-line-highlight)] rounded transition-colors"
                 title={isCarouselPaused ? 'Play carousel' : 'Pause carousel'}
               >
@@ -376,8 +381,8 @@ export default function GallerySection() {
           {/* Carousel Container */}
           <div 
             className="relative overflow-hidden py-6 px-4"
-            onMouseEnter={() => setIsCarouselPaused(true)}
-            onMouseLeave={() => setIsCarouselPaused(false)}
+            onMouseEnter={() => !isManuallyPaused && setIsCarouselPaused(true)}
+            onMouseLeave={() => !isManuallyPaused && setIsCarouselPaused(false)}
           >
             {/* Gradient Overlays */}
             <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-[var(--vscode-bg)] to-transparent z-10 pointer-events-none" />
