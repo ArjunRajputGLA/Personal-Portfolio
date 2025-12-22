@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Search, FileCode, User, Trophy, Image, Mail, Home, 
   Puzzle, GitBranch, Download, Moon, Sun, Terminal, Settings,
-  ExternalLink, Zap, Folder, Clock, Command
+  ExternalLink, Zap, Folder, Clock, Command, Gamepad2
 } from 'lucide-react';
 
 interface CommandPaletteProps {
@@ -62,6 +62,7 @@ export default function CommandPalette({
     { id: 'experience', label: 'Go to Experience', category: 'navigation', icon: GitBranch, section: 'experience', file: 'experience.log' },
     { id: 'achievements', label: 'Go to Achievements', category: 'navigation', icon: Trophy, section: 'achievements', file: 'achievements.yaml' },
     { id: 'gallery', label: 'Go to Gallery', category: 'navigation', icon: Image, section: 'gallery', file: 'media/' },
+    { id: 'games', label: '🎮 Open Games Playground', category: 'navigation', icon: Gamepad2, section: 'games', file: 'games/', description: '9 brain-training games to play!' },
     { id: 'contact', label: 'Go to Contact', category: 'navigation', icon: Mail, section: 'contact', file: 'contact.tsx' },
     
     // Action commands
@@ -92,6 +93,7 @@ export default function CommandPalette({
     { id: 'file-experience', label: 'experience.log', category: 'navigation', icon: FileCode, section: 'experience', file: 'src/experience.log', description: 'Work experience' },
     { id: 'file-achievements', label: 'achievements.yaml', category: 'navigation', icon: FileCode, section: 'achievements', file: 'src/achievements.yaml', description: 'Achievements & awards' },
     { id: 'file-gallery', label: 'media/', category: 'navigation', icon: Folder, section: 'gallery', file: 'media/', description: 'Gallery & photos' },
+    { id: 'file-games', label: 'games/', category: 'navigation', icon: Gamepad2, section: 'games', file: 'src/games/', description: '🎮 Games Playground' },
     { id: 'file-contact', label: 'contact.tsx', category: 'navigation', icon: FileCode, section: 'contact', file: 'src/contact.tsx', description: 'Contact form' },
     { id: 'file-resume', label: 'resume.pdf', category: 'action', icon: Download, file: 'public/resume.pdf', description: 'Download resume' },
     { id: 'file-globals', label: 'globals.css', category: 'navigation', icon: FileCode, file: 'src/globals.css', description: 'Global styles' },

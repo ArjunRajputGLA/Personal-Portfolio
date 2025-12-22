@@ -329,7 +329,7 @@ export default function Terminal({ isOpen, onToggle, onNavigate, onThemeToggle, 
 
   const allCommands = [
     'help', 'clear', 'home', 'about', 'skills', 'projects', 'experience', 
-    'achievements', 'gallery', 'contact', 'whoami', 'ls', 'cat', 'status',
+    'achievements', 'gallery', 'games', 'playground', 'play', 'contact', 'whoami', 'ls', 'cat', 'status',
     'social', 'resume', 'hire', 'collaborate', 'email', 'theme', 'sidebar',
     'minimap', 'stats', 'lighthouse', 'history', 'sudo', 'hack-nasa', 
     'matrix', 'joke', 'quote', 'konami', 'neofetch', 'cowsay', 'fortune',
@@ -608,6 +608,7 @@ export default function Terminal({ isOpen, onToggle, onNavigate, onThemeToggle, 
           addLine('output', '  experience    - See work experience');
           addLine('output', '  achievements  - View awards & accomplishments');
           addLine('output', '  gallery       - Photo gallery');
+          addLine('output', '  games         - 🎮 Games Playground (NEW!)');
           addLine('output', '  contact       - Get in touch');
           addLine('info', '');
           addLine('info', '💡 Just type the section name and press Enter!');
@@ -656,6 +657,7 @@ export default function Terminal({ isOpen, onToggle, onNavigate, onThemeToggle, 
           addLine('info', '');
           addLine('info', '🎮 FUN COMMANDS (Easter Eggs!)');
           addLine('info', '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+          addLine('output', '  games / play    - 🎮 Open Games Playground (NEW!)');
           addLine('output', '  joke            - Get a programming joke');
           addLine('output', '  quote           - Inspirational quote');
           addLine('output', '  fortune         - Tell your fortune');
@@ -771,8 +773,32 @@ export default function Terminal({ isOpen, onToggle, onNavigate, onThemeToggle, 
       case 'experience':
       case 'achievements':
       case 'gallery':
+      case 'games':
       case 'contact':
         handleNavigate(command);
+        break;
+
+      case 'playground':
+      case 'play':
+        addLine('info', '');
+        addLine('ascii', ' ╔═══════════════════════════════════════╗');
+        addLine('ascii', ' ║    🎮 GAMES PLAYGROUND ACTIVATED! 🎮   ║');
+        addLine('ascii', ' ╚═══════════════════════════════════════╝');
+        addLine('info', '');
+        addLine('success', '🕹️  9 Brain-Training Games Available:');
+        addLine('output', '   • 2048        - Slide & merge numbers');
+        addLine('output', '   • Sudoku      - Classic 9x9 puzzles');
+        addLine('output', '   • Memory      - Match the cards');
+        addLine('output', '   • Snake       - Classic arcade fun');
+        addLine('output', '   • Minesweeper - Find the mines');
+        addLine('output', '   • Math        - Quick calculations');
+        addLine('output', '   • Sequence    - Pattern recognition');
+        addLine('output', '   • Simon Says  - Memory patterns');
+        addLine('output', '   • Color Match - Stroop effect');
+        addLine('info', '');
+        addLine('info', '🎯 Earn achievements & track your high scores!');
+        addLine('info', '');
+        handleNavigate('games');
         break;
 
       case 'whoami':
@@ -824,6 +850,7 @@ export default function Terminal({ isOpen, onToggle, onNavigate, onThemeToggle, 
           addLine('output', '├── projects/       (Projects)');
           addLine('output', '├── experience.log  (Experience)');
           addLine('output', '├── achievements.yaml (Achievements)');
+          addLine('output', '├── games/          (Games Playground) 🎮 NEW!');
           addLine('output', '├── contact.tsx     (Contact)');
           addLine('output', '└── media/          (Gallery)');
         }

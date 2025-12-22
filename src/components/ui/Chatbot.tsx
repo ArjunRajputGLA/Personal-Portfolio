@@ -805,14 +805,6 @@ export default function Chatbot() {
               </div>
             </form>
 
-            {/* Footer */}
-            <div className="px-3 py-2 border-t border-[var(--vscode-border)] bg-[var(--vscode-sidebar)] flex items-center justify-center text-[10px] text-[var(--vscode-text-muted)]">
-              <span className="flex items-center gap-1">
-                <Sparkles size={10} />
-                Powered by Google Gemini AI
-              </span>
-            </div>
-
             {/* Resize Handle */}
             {!isMaximized && !isMobile && (
               <div

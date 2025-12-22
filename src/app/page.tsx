@@ -13,6 +13,7 @@ import ProjectsSection from '@/components/sections/ProjectsSection';
 import ExperienceSection from '@/components/sections/ExperienceSection';
 import AchievementsSection from '@/components/sections/AchievementsSection';
 import GallerySection from '@/components/sections/GallerySection';
+import GamesSection from '@/components/sections/GamesSection';
 import ContactSection from '@/components/sections/ContactSection';
 import Terminal from '@/components/ui/Terminal';
 import CommandPalette from '@/components/ui/CommandPalette';
@@ -36,6 +37,7 @@ const sectionToBreadcrumb: { [key: string]: string[] } = {
   experience: ['src', 'experience.log'],
   achievements: ['src', 'achievements.yaml'],
   gallery: ['media', 'journey'],
+  games: ['src', 'games'],
   contact: ['src', 'contact.tsx'],
 };
 
@@ -121,7 +123,7 @@ function PortfolioContent() {
       setScrollPercentage(scrollPercent);
 
       // Update active section based on scroll position
-      const sections = ['home', 'about', 'skills', 'projects', 'experience', 'achievements', 'gallery', 'contact'];
+      const sections = ['home', 'about', 'skills', 'projects', 'experience', 'achievements', 'gallery', 'games', 'contact'];
       for (const section of sections) {
         const element = document.getElementById(section);
         if (element) {
@@ -376,6 +378,7 @@ function PortfolioContent() {
           <ExperienceSection />
           <AchievementsSection />
           <GallerySection />
+          <GamesSection />
           <ContactSection />
         </div>
 

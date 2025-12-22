@@ -21,7 +21,8 @@ import {
   File,
   Folder,
   PanelLeftClose,
-  PanelLeft
+  PanelLeft,
+  Gamepad2
 } from 'lucide-react';
 
 interface ActivityBarProps {
@@ -42,6 +43,7 @@ const sections = [
   { id: 'experience', icon: GitBranch, label: 'Source Control', tooltip: 'Experience (Timeline)' },
   { id: 'achievements', icon: Trophy, label: 'Achievements', tooltip: 'Achievements' },
   { id: 'gallery', icon: Image, label: 'Gallery', tooltip: 'Gallery (Media)' },
+  { id: 'games', icon: Gamepad2, label: 'Games', tooltip: 'Games Playground', badge: 'NEW' },
   { id: 'contact', icon: Mail, label: 'Mail', tooltip: 'Contact (Mail)' },
 ];
 
@@ -71,6 +73,22 @@ const explorerFiles = [
       },
       { name: 'experience.log', type: 'file', icon: File, section: 'experience' },
       { name: 'achievements.yaml', type: 'file', icon: FileText, section: 'achievements' },
+      { 
+        name: 'games', 
+        type: 'folder', 
+        section: 'games',
+        children: [
+          { name: '2048.tsx', type: 'file', icon: FileCode, section: 'games' },
+          { name: 'sudoku.tsx', type: 'file', icon: FileCode, section: 'games' },
+          { name: 'memory.tsx', type: 'file', icon: FileCode, section: 'games' },
+          { name: 'snake.tsx', type: 'file', icon: FileCode, section: 'games' },
+          { name: 'minesweeper.tsx', type: 'file', icon: FileCode, section: 'games' },
+          { name: 'math.tsx', type: 'file', icon: FileCode, section: 'games' },
+          { name: 'sequence.tsx', type: 'file', icon: FileCode, section: 'games' },
+          { name: 'simon.tsx', type: 'file', icon: FileCode, section: 'games' },
+          { name: 'colors.tsx', type: 'file', icon: FileCode, section: 'games' }
+        ]
+      },
       { name: 'contact.tsx', type: 'file', icon: FileCode, section: 'contact' },
     ]
   },
@@ -224,6 +242,13 @@ export default function ActivityBar({
                 )}
                 
                 <Icon size={24} />
+                
+                {/* NEW Badge for Games */}
+                {'badge' in section && section.badge && (
+                  <span className="absolute top-0 right-0 px-1 bg-green-500 text-[8px] font-bold text-white rounded animate-pulse">
+                    {section.badge}
+                  </span>
+                )}
                 
                 {/* Tooltip */}
                 <div className="absolute left-full ml-2 px-2 py-1 bg-[var(--vscode-sidebar)] border border-[var(--vscode-border)] rounded text-xs whitespace-nowrap opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 text-[var(--vscode-text)]">

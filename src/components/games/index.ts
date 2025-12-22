@@ -1,0 +1,9 @@
+export { default as Game2048 } from './Game2048';
+export { default as MemoryMatch } from './MemoryMatch';
+export { default as SnakeGame } from './SnakeGame';
+export { default as Minesweeper } from './Minesweeper';
+export { default as MathChallenge } from './MathChallenge';
+export { default as SimonSays } from './SimonSays';
+export { default as ColorMatch } from './ColorMatch';
+export { default as NumberSequence } from './NumberSequence';
+export { default as SudokuGame } from './SudokuGame';

@@ -24,6 +24,7 @@ const tabConfig: Tab[] = [
   { id: 'experience', label: 'experience.log', icon: '📜' },
   { id: 'achievements', label: 'achievements.yaml', icon: '🏆' },
   { id: 'gallery', label: 'media/', icon: '🖼️' },
+  { id: 'games', label: 'games/', icon: '🎮' },
   { id: 'contact', label: 'contact.tsx', icon: '✉️' },
 ];
 
