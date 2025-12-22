@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import ResizeHandle from '@/components/ui/ResizeHandle';
 import {
   GitBranch,
   GitCommit,
@@ -19,6 +20,8 @@ import {
 interface GitPanelProps {
   isOpen: boolean;
   onClose: () => void;
+  width?: number;
+  onWidthChange?: (width: number) => void;
 }
 
 interface CommitData {
@@ -52,7 +55,7 @@ const unstagedChanges = [
   { file: 'package.json', status: 'modified' },
 ];
 
-export default function GitPanel({ isOpen, onClose }: GitPanelProps) {
+export default function GitPanel({ isOpen, onClose, width = 250, onWidthChange }: GitPanelProps) {
   const [currentBranch, setCurrentBranch] = useState('main');
   const [showBranches, setShowBranches] = useState(false);
   const [expandedSections, setExpandedSections] = useState({
@@ -61,6 +64,11 @@ export default function GitPanel({ isOpen, onClose }: GitPanelProps) {
     commits: true,
   });
   const [commitMessage, setCommitMessage] = useState('');
+
+  const handleResize = (delta: number) => {
+    const newWidth = Math.max(150, Math.min(500, width + delta));
+    onWidthChange?.(newWidth);
+  };
 
   const toggleSection = (section: keyof typeof expandedSections) => {
     setExpandedSections(prev => ({ ...prev, [section]: !prev[section] }));
@@ -88,18 +96,21 @@ export default function GitPanel({ isOpen, onClose }: GitPanelProps) {
 
   return (
     <AnimatePresence>
-      <motion.div
-        initial={{ width: 0, opacity: 0 }}
-        animate={{ width: 300, opacity: 1 }}
-        exit={{ width: 0, opacity: 0 }}
-        className="fixed top-[30px] left-[48px] bottom-[22px] z-40 bg-[var(--vscode-sidebar)] border-r border-[var(--vscode-border)] overflow-hidden flex flex-col"
+      <div
+        style={{ width }}
+        className="fixed top-[30px] left-[48px] bottom-[22px] z-50 bg-[var(--vscode-sidebar)] border-r border-[var(--vscode-border)] overflow-hidden flex flex-col"
       >
+        {/* Resize Handle */}
+        <ResizeHandle onResize={handleResize} />
+        
         {/* Header */}
         <div className="flex items-center justify-between px-4 h-[35px] bg-[var(--vscode-titlebar)] border-b border-[var(--vscode-border)]">
           <span className="text-xs font-medium uppercase tracking-wide">Source Control</span>
           <button
             onClick={onClose}
             className="p-1 hover:bg-[var(--vscode-line-highlight)] rounded"
+            title="Close"
+            aria-label="Close"
           >
             <X size={14} />
           </button>
@@ -162,6 +173,8 @@ export default function GitPanel({ isOpen, onClose }: GitPanelProps) {
             <button
               disabled={!commitMessage}
               className="px-3 py-2 bg-[var(--vscode-accent)] rounded text-sm disabled:opacity-50 hover:opacity-90"
+              title="Commit"
+              aria-label="Commit"
             >
               <Check size={14} />
             </button>
@@ -191,7 +204,11 @@ export default function GitPanel({ isOpen, onClose }: GitPanelProps) {
                       {getStatusIcon(change.status)}
                     </span>
                     <span className="flex-1 truncate text-xs">{change.file}</span>
-                    <button className="opacity-0 group-hover:opacity-100 p-1 hover:bg-[var(--vscode-bg)] rounded">
+                    <button 
+                      className="opacity-0 group-hover:opacity-100 p-1 hover:bg-[var(--vscode-bg)] rounded"
+                      title="Unstage"
+                      aria-label="Unstage"
+                    >
                       <RotateCcw size={12} />
                     </button>
                   </div>
@@ -221,7 +238,11 @@ export default function GitPanel({ isOpen, onClose }: GitPanelProps) {
                       {getStatusIcon(change.status)}
                     </span>
                     <span className="flex-1 truncate text-xs">{change.file}</span>
-                    <button className="opacity-0 group-hover:opacity-100 p-1 hover:bg-[var(--vscode-bg)] rounded">
+                    <button 
+                      className="opacity-0 group-hover:opacity-100 p-1 hover:bg-[var(--vscode-bg)] rounded"
+                      title="Stage"
+                      aria-label="Stage"
+                    >
                       <Plus size={12} />
                     </button>
                   </div>
@@ -281,7 +302,7 @@ export default function GitPanel({ isOpen, onClose }: GitPanelProps) {
             </span>
           </div>
         </div>
-      </motion.div>
+      </div>
     </AnimatePresence>
   );
 }

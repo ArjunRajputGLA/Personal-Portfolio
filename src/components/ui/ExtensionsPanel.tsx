@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import ResizeHandle from '@/components/ui/ResizeHandle';
 import {
   Download,
   Star,
@@ -16,6 +17,8 @@ import {
 interface ExtensionsPanelProps {
   isOpen: boolean;
   onClose: () => void;
+  width?: number;
+  onWidthChange?: (width: number) => void;
 }
 
 interface Extension {
@@ -120,12 +123,17 @@ const extensions: Extension[] = [
 
 const categories = ['All', 'Frontend', 'Backend', 'AI', 'Database', 'Algorithms', 'Career'];
 
-export default function ExtensionsPanel({ isOpen, onClose }: ExtensionsPanelProps) {
+export default function ExtensionsPanel({ isOpen, onClose, width = 250, onWidthChange }: ExtensionsPanelProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [installedExtensions, setInstalledExtensions] = useState(
     extensions.reduce((acc, ext) => ({ ...acc, [ext.id]: ext.installed }), {} as Record<string, boolean>)
   );
+
+  const handleResize = (delta: number) => {
+    const newWidth = Math.max(150, Math.min(500, width + delta));
+    onWidthChange?.(newWidth);
+  };
 
   const filteredExtensions = extensions.filter(ext => {
     const matchesSearch = ext.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -142,12 +150,13 @@ export default function ExtensionsPanel({ isOpen, onClose }: ExtensionsPanelProp
 
   return (
     <AnimatePresence>
-      <motion.div
-        initial={{ width: 0, opacity: 0 }}
-        animate={{ width: 300, opacity: 1 }}
-        exit={{ width: 0, opacity: 0 }}
-        className="fixed top-[30px] left-[48px] bottom-[22px] z-40 bg-[var(--vscode-sidebar)] border-r border-[var(--vscode-border)] overflow-hidden flex flex-col"
+      <div
+        style={{ width }}
+        className="fixed top-[30px] left-[48px] bottom-[22px] z-50 bg-[var(--vscode-sidebar)] border-r border-[var(--vscode-border)] overflow-hidden flex flex-col"
       >
+        {/* Resize Handle */}
+        <ResizeHandle onResize={handleResize} />
+        
         {/* Header */}
         <div className="flex items-center justify-between px-4 h-[35px] bg-[var(--vscode-titlebar)] border-b border-[var(--vscode-border)]">
           <span className="text-xs font-medium uppercase tracking-wide flex items-center gap-2">
@@ -181,6 +190,7 @@ export default function ExtensionsPanel({ isOpen, onClose }: ExtensionsPanelProp
           {categories.map(cat => (
             <button
               key={cat}
+              title={`Filter by ${cat}`}
               onClick={() => setSelectedCategory(cat)}
               className={`px-2 py-1 text-[10px] rounded-full transition-colors ${
                 selectedCategory === cat
@@ -235,6 +245,8 @@ export default function ExtensionsPanel({ isOpen, onClose }: ExtensionsPanelProp
                   </div>
                 </div>
                 <button
+                  type="button"
+                  title={installedExtensions[ext.id] ? `Uninstall ${ext.name}` : `Install ${ext.name}`}
                   onClick={() => toggleInstall(ext.id)}
                   className={`flex-shrink-0 p-2 rounded transition-colors ${
                     installedExtensions[ext.id]
@@ -263,7 +275,7 @@ export default function ExtensionsPanel({ isOpen, onClose }: ExtensionsPanelProp
             🔥 All skills actively maintained and production-ready!
           </p>
         </div>
-      </motion.div>
+      </div>
     </AnimatePresence>
   );
 }

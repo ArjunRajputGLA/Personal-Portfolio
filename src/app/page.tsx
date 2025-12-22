@@ -60,6 +60,20 @@ function PortfolioContent() {
   const [settings, setSettings] = useState<SettingsState>(defaultSettingsState);
   const welcomeShownRef = useRef(false);
   
+  // Panel widths state
+  const [sidebarWidth, setSidebarWidth] = useState(250);
+  const [gitPanelWidth, setGitPanelWidth] = useState(250);
+  const [extensionsPanelWidth, setExtensionsPanelWidth] = useState(250);
+  const [isMobile, setIsMobile] = useState(false);
+  
+  // Check for mobile on mount and resize
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+  
   // Konami code state
   const [konamiSequence, setKonamiSequence] = useState<string[]>([]);
   const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
@@ -338,26 +352,41 @@ function PortfolioContent() {
         onGitClick={openGitPanel}
         onExtensionsClick={openExtensionsPanel}
         onSettingsClick={() => setSettingsOpen(true)}
+        sidebarWidth={sidebarWidth}
+        onSidebarWidthChange={setSidebarWidth}
       />
 
       {/* Side Panels */}
-      <GitPanel isOpen={gitOpen} onClose={() => setGitOpen(false)} />
-      <ExtensionsPanel isOpen={extensionsOpen} onClose={() => setExtensionsOpen(false)} />
+      <GitPanel 
+        isOpen={gitOpen} 
+        onClose={() => setGitOpen(false)} 
+        width={gitPanelWidth}
+        onWidthChange={setGitPanelWidth}
+      />
+      <ExtensionsPanel 
+        isOpen={extensionsOpen} 
+        onClose={() => setExtensionsOpen(false)} 
+        width={extensionsPanelWidth}
+        onWidthChange={setExtensionsPanelWidth}
+      />
 
       {/* Main Content Area */}
       <main 
         className={`
-          pt-[30px] pb-[22px] transition-all duration-300
-          ${sidebarCollapsed 
-            ? (gitOpen || extensionsOpen) 
-              ? 'ml-0 md:ml-[298px]' 
-              : 'ml-0 md:ml-[48px]'
-            : (gitOpen || extensionsOpen) 
-              ? 'ml-0 md:ml-[548px]' 
-              : 'ml-0 md:ml-[298px]'
-          }
+          pt-[30px] transition-all duration-150
           ${(terminalOpen || outputOpen) ? 'pb-[272px]' : 'pb-[22px]'}
         `}
+        style={{
+          marginLeft: isMobile ? 0 : (
+            (sidebarCollapsed && !gitOpen && !extensionsOpen) 
+              ? 48 
+              : gitOpen 
+                ? 48 + gitPanelWidth
+                : extensionsOpen 
+                  ? 48 + extensionsPanelWidth
+                  : 48 + sidebarWidth
+          )
+        }}
       >
         {/* Tab Bar */}
         <TabBar 

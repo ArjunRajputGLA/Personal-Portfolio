@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import ResizeHandle from '@/components/ui/ResizeHandle';
 import { 
   Home, 
   User, 
@@ -33,6 +34,8 @@ interface ActivityBarProps {
   onGitClick?: () => void;
   onExtensionsClick?: () => void;
   onSettingsClick?: () => void;
+  sidebarWidth?: number;
+  onSidebarWidthChange?: (width: number) => void;
 }
 
 const sections = [
@@ -187,10 +190,17 @@ export default function ActivityBar({
   onToggleCollapse,
   onGitClick, 
   onExtensionsClick, 
-  onSettingsClick 
+  onSettingsClick,
+  sidebarWidth = 250,
+  onSidebarWidthChange
 }: ActivityBarProps) {
   const [explorerExpanded, setExplorerExpanded] = useState(true);
   const [outlineExpanded, setOutlineExpanded] = useState(true);
+
+  const handleResize = (delta: number) => {
+    const newWidth = Math.max(150, Math.min(500, sidebarWidth + delta));
+    onSidebarWidthChange?.(newWidth);
+  };
 
   return (
     <>
@@ -308,11 +318,8 @@ export default function ActivityBar({
       {/* Explorer Panel (Collapsible) */}
       <AnimatePresence>
         {!isCollapsed && (
-          <motion.aside
-            initial={{ width: 0, opacity: 0 }}
-            animate={{ width: 250, opacity: 1 }}
-            exit={{ width: 0, opacity: 0 }}
-            transition={{ duration: 0.2, ease: 'easeInOut' }}
+          <aside
+            style={{ width: sidebarWidth }}
             className={`
               fixed left-[48px] top-[30px] bottom-[22px]
               bg-[var(--vscode-sidebar)] 
@@ -322,6 +329,9 @@ export default function ActivityBar({
               hidden md:flex
             `}
           >
+            {/* Resize Handle */}
+            <ResizeHandle onResize={handleResize} />
+            
             {/* Explorer Header */}
             <div className="flex items-center justify-between px-4 py-2 text-[11px] uppercase tracking-wider text-[var(--vscode-text-muted)] border-b border-[var(--vscode-sidebar-border)]">
               <span>Explorer</span>
@@ -407,7 +417,7 @@ export default function ActivityBar({
                 )}
               </AnimatePresence>
             </div>
-          </motion.aside>
+          </aside>
         )}
       </AnimatePresence>
 
