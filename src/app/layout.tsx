@@ -6,6 +6,9 @@ export const metadata: Metadata = {
   description: "Personal portfolio of Arjun Singh Rajput - AI Innovator, Full-Stack Developer, and National Hackathon Winner. Building intelligent, scalable systems.",
   keywords: ["Arjun Singh Rajput", "AI Developer", "Full-Stack Developer", "Portfolio", "LeetCode", "Machine Learning", "React Developer"],
   authors: [{ name: "Arjun Singh Rajput" }],
+  icons: {
+    icon: "/favicon.ico",
+  },
   openGraph: {
     title: "ArjunRajput.ai | AI Innovator & Full-Stack Developer",
     description: "Personal portfolio of Arjun Singh Rajput - Building intelligent, scalable systems.",
