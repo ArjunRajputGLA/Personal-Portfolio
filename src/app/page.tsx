@@ -62,8 +62,8 @@ function PortfolioContent() {
   
   // Panel widths state
   const [sidebarWidth, setSidebarWidth] = useState(250);
-  const [gitPanelWidth, setGitPanelWidth] = useState(250);
-  const [extensionsPanelWidth, setExtensionsPanelWidth] = useState(250);
+  const [gitPanelWidth, setGitPanelWidth] = useState(320);
+  const [extensionsPanelWidth, setExtensionsPanelWidth] = useState(320);
   const [isMobile, setIsMobile] = useState(false);
   
   // Check for mobile on mount and resize
