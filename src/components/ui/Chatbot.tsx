@@ -64,9 +64,22 @@ const DEFAULT_SIZE = { width: 420, height: 600 };
 const MIN_SIZE = { width: 350, height: 400 };
 const MAX_SIZE = { width: 800, height: 900 };
 
-export default function Chatbot() {
+interface ChatbotProps {
+  externalOpen?: boolean;
+  onExternalOpenChange?: (open: boolean) => void;
+}
+
+export default function Chatbot({ externalOpen, onExternalOpenChange }: ChatbotProps = {}) {
   // Window state
-  const [isOpen, setIsOpen] = useState(false);
+  const [internalOpen, setInternalOpen] = useState(false);
+  const isOpen = externalOpen !== undefined ? externalOpen : internalOpen;
+  const setIsOpen = (open: boolean) => {
+    if (onExternalOpenChange) {
+      onExternalOpenChange(open);
+    } else {
+      setInternalOpen(open);
+    }
+  };
   const [isMinimized, setIsMinimized] = useState(false);
   const [isMaximized, setIsMaximized] = useState(false);
   const [position, setPosition] = useState<Position>({ x: 0, y: 0 });

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Menu, Sun, Moon, Minus, Square, X, Download } from 'lucide-react';
+import { Menu, Sun, Moon, Minus, Square, X, Download, Mic } from 'lucide-react';
 
 interface TitleBarProps {
   onMenuClick: () => void;
@@ -11,6 +11,7 @@ interface TitleBarProps {
   onToggleTerminal?: () => void;
   onOpenSettings?: () => void;
   onOpenCommandPalette?: () => void;
+  onVoiceControl?: () => void;
 }               
 
 export default function TitleBar({ 
@@ -20,7 +21,8 @@ export default function TitleBar({
   onToggleSidebar,
   onToggleTerminal,
   onOpenSettings,
-  onOpenCommandPalette
+  onOpenCommandPalette,
+  onVoiceControl
 }: TitleBarProps) {
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [copied, setCopied] = useState<string | null>(null);
@@ -182,6 +184,20 @@ export default function TitleBar({
 
       {/* Right Section - Actions & Window Controls */}
       <div className="flex items-center gap-2">
+        {/* Voice Control Button */}
+        <button
+          onClick={onVoiceControl}
+          className="p-1 hover:bg-[var(--vscode-line-highlight)] rounded relative group"
+          aria-label="Voice Control"
+          title="Voice Control (Alt+V)"
+        >
+          <Mic size={14} className="text-[var(--vscode-accent)]" />
+          <span className="absolute -top-0.5 -right-0.5 flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--vscode-accent)] opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--vscode-accent)]"></span>
+          </span>
+        </button>
+
         <button
           onClick={onThemeToggle}
           className="p-1 hover:bg-[var(--vscode-line-highlight)] rounded"

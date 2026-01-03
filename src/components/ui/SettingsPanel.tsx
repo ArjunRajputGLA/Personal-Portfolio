@@ -20,6 +20,8 @@ export interface SettingsState {
   };
   features: {
     enableAnimations: boolean;
+    voiceControl: boolean;
+    voiceResponse: boolean;
   };
   accessibility: {
     highContrast: boolean;
@@ -35,6 +37,8 @@ export const defaultSettings: SettingsState = {
   },
   features: {
     enableAnimations: true,
+    voiceControl: true,
+    voiceResponse: true,
   },
   accessibility: {
     highContrast: false,
@@ -221,6 +225,40 @@ export default function SettingsPanel({ isOpen, onClose, settings, onSettingsCha
                         >
                           <div className={`w-5 h-5 rounded-full bg-white transition-transform ${
                             localSettings.features.enableAnimations ? 'translate-x-6' : 'translate-x-0.5'
+                          }`} />
+                        </button>
+                      </label>
+
+                      <label className="flex items-center justify-between">
+                        <div>
+                          <span className="text-sm block">Voice Control</span>
+                          <span className="text-xs text-[var(--vscode-text-muted)]">Navigate with voice commands (Alt+V)</span>
+                        </div>
+                        <button
+                          onClick={() => handleChange('features', 'voiceControl', !localSettings.features.voiceControl)}
+                          className={`w-12 h-6 rounded-full transition-colors ${
+                            localSettings.features.voiceControl ? 'bg-[var(--vscode-accent)]' : 'bg-[var(--vscode-border)]'
+                          }`}
+                        >
+                          <div className={`w-5 h-5 rounded-full bg-white transition-transform ${
+                            localSettings.features.voiceControl ? 'translate-x-6' : 'translate-x-0.5'
+                          }`} />
+                        </button>
+                      </label>
+
+                      <label className="flex items-center justify-between">
+                        <div>
+                          <span className="text-sm block">Voice Responses</span>
+                          <span className="text-xs text-[var(--vscode-text-muted)]">Text-to-speech feedback</span>
+                        </div>
+                        <button
+                          onClick={() => handleChange('features', 'voiceResponse', !localSettings.features.voiceResponse)}
+                          className={`w-12 h-6 rounded-full transition-colors ${
+                            localSettings.features.voiceResponse ? 'bg-[var(--vscode-accent)]' : 'bg-[var(--vscode-border)]'
+                          }`}
+                        >
+                          <div className={`w-5 h-5 rounded-full bg-white transition-transform ${
+                            localSettings.features.voiceResponse ? 'translate-x-6' : 'translate-x-0.5'
                           }`} />
                         </button>
                       </label>

@@ -28,6 +28,7 @@ import ExtensionsPanel from '@/components/ui/ExtensionsPanel';
 import LiveCollaboration from '@/components/ui/LiveCollaboration';
 import MatrixEffect from '@/components/ui/MatrixEffect';
 import Chatbot from '@/components/ui/Chatbot';
+import VoiceControl from '@/components/VoiceControl';
 
 const sectionToBreadcrumb: { [key: string]: string[] } = {
   home: ['src', 'index.tsx'],
@@ -58,6 +59,8 @@ function PortfolioContent() {
   const [extensionsOpen, setExtensionsOpen] = useState(false);
   const [matrixActive, setMatrixActive] = useState(false);
   const [settings, setSettings] = useState<SettingsState>(defaultSettingsState);
+  const [chatbotOpen, setChatbotOpen] = useState(false);
+  const [voiceControlOpen, setVoiceControlOpen] = useState(false);
   const welcomeShownRef = useRef(false);
   
   // Panel widths state
@@ -213,6 +216,22 @@ function PortfolioContent() {
         e.preventDefault();
         setProblemsOpen(prev => !prev);
       }
+      // Alt + V for Voice Control
+      if (e.altKey && e.key.toLowerCase() === 'v') {
+        e.preventDefault();
+        if (!settings.features.voiceControl) {
+          addNotification({
+            type: 'warning',
+            message: 'Voice Control is disabled. Enable it in Settings → Features to use voice commands.',
+            action: {
+              label: 'Open Settings',
+              onClick: () => setSettingsOpen(true),
+            },
+          });
+          return;
+        }
+        setVoiceControlOpen(prev => !prev);
+      }
       // Escape to close modals
       if (e.key === 'Escape') {
         setCommandPaletteOpen(false);
@@ -237,6 +256,16 @@ function PortfolioContent() {
   const handleTabChange = (tabId: string) => {
     handleSectionChange(tabId);
   };
+
+  const handleDownloadResume = useCallback(() => {
+    const link = document.createElement('a');
+    link.href = '/resume.pdf';
+    link.download = 'Arjun_Singh_Rajput_Resume.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    addNotification({ type: 'success', message: 'Resume download started!' });
+  }, [addNotification]);
 
   const toggleTheme = () => {
     const newTheme = settings.appearance.theme === 'dark' ? 'light' : 'dark';
@@ -341,6 +370,20 @@ function PortfolioContent() {
         onToggleTerminal={() => setTerminalOpen(prev => !prev)}
         onOpenSettings={() => setSettingsOpen(true)}
         onOpenCommandPalette={() => setCommandPaletteOpen(true)}
+        onVoiceControl={() => {
+          if (!settings.features.voiceControl) {
+            addNotification({
+              type: 'warning',
+              message: 'Voice Control is disabled. Enable it in Settings → Features to use voice commands.',
+              action: {
+                label: 'Open Settings',
+                onClick: () => setSettingsOpen(true),
+              },
+            });
+            return;
+          }
+          setVoiceControlOpen(true);
+        }}
       />
 
       {/* Activity Bar (Sidebar) */}
@@ -434,6 +477,21 @@ function PortfolioContent() {
         problemsCount={6}
       />
 
+      {/* Voice Control - Hidden, controlled by header button */}
+      <VoiceControl
+        onNavigate={handleSectionChange}
+        onOpenTerminal={() => setTerminalOpen(true)}
+        onOpenChatbot={() => setChatbotOpen(true)}
+        onOpenSettings={() => setSettingsOpen(true)}
+        onOpenCommandPalette={() => setCommandPaletteOpen(true)}
+        onToggleTheme={toggleTheme}
+        onDownloadResume={handleDownloadResume}
+        voiceEnabled={settings.features.voiceControl}
+        voiceResponseEnabled={settings.features.voiceResponse}
+        externalOpen={voiceControlOpen}
+        onExternalOpenChange={setVoiceControlOpen}
+      />
+
       {/* Bottom Panels */}
       <Terminal 
         isOpen={terminalOpen}
@@ -488,7 +546,10 @@ function PortfolioContent() {
       <LiveCollaboration />
 
       {/* AI Chatbot */}
-      <Chatbot />
+      <Chatbot 
+        externalOpen={chatbotOpen} 
+        onExternalOpenChange={setChatbotOpen} 
+      />
 
       {/* Terminal Toggle Button (floating) */}
       <button
