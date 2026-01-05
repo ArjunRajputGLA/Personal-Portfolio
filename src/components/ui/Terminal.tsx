@@ -315,12 +315,7 @@ export default function Terminal({ isOpen, onToggle, onNavigate, onThemeToggle, 
   const [commandCount, setCommandCount] = useState(0);
   const [showHintBubble, setShowHintBubble] = useState(false);
   const [hintBubbleMessage, setHintBubbleMessage] = useState('');
-  const [hasCompletedTutorial, setHasCompletedTutorial] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('terminal-tutorial-completed') === 'true';
-    }
-    return false;
-  });
+  const [hasCompletedTutorial, setHasCompletedTutorial] = useState(false);
   const [showCompletionModal, setShowCompletionModal] = useState(false);
   
   const inputRef = useRef<HTMLInputElement>(null);
@@ -328,7 +323,7 @@ export default function Terminal({ isOpen, onToggle, onNavigate, onThemeToggle, 
   const lineIdRef = useRef(5);
 
   const allCommands = [
-    'help', 'clear', 'home', 'about', 'skills', 'projects', 'experience', 
+    'help', 'clear', 'home', 'about', 'skills', 'skills-network', 'network', 'visualize-skills', 'projects', 'experience', 
     'achievements', 'gallery', 'games', 'playground', 'play', 'contact', 'whoami', 'ls', 'cat', 'status',
     'social', 'resume', 'hire', 'collaborate', 'email', 'theme', 'sidebar',
     'minimap', 'stats', 'lighthouse', 'history', 'sudo', 'hack-nasa', 
@@ -351,6 +346,13 @@ export default function Terminal({ isOpen, onToggle, onNavigate, onThemeToggle, 
       }
     }
   }, [isOpen]);
+
+  // Read localStorage value for tutorial completion on mount
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setHasCompletedTutorial(localStorage.getItem('terminal-tutorial-completed') === 'true');
+    }
+  }, []);
 
   // Auto-scroll to bottom
   useEffect(() => {
@@ -604,11 +606,12 @@ export default function Terminal({ isOpen, onToggle, onNavigate, onThemeToggle, 
           addLine('output', '  home          - Jump to the hero section');
           addLine('output', '  about         - Learn about Arjun');
           addLine('output', '  skills        - View technical skills');
+          addLine('output', '  network       - 🧠 Skills Neural Network (NEW!)');
           addLine('output', '  projects      - Browse all projects');
           addLine('output', '  experience    - See work experience');
           addLine('output', '  achievements  - View awards & accomplishments');
           addLine('output', '  gallery       - Photo gallery');
-          addLine('output', '  games         - 🎮 Games Playground (NEW!)');
+          addLine('output', '  games         - 🎮 Games Playground');
           addLine('output', '  contact       - Get in touch');
           addLine('info', '');
           addLine('info', '💡 Just type the section name and press Enter!');
@@ -778,6 +781,28 @@ export default function Terminal({ isOpen, onToggle, onNavigate, onThemeToggle, 
         handleNavigate(command);
         break;
 
+      case 'skills-network':
+      case 'network':
+      case 'visualize-skills':
+        addLine('info', '');
+        addLine('ascii', ' ╔═══════════════════════════════════════╗');
+        addLine('ascii', ' ║    🧠 SKILLS NEURAL NETWORK 🧠       ║');
+        addLine('ascii', ' ╚═══════════════════════════════════════╝');
+        addLine('info', '');
+        addLine('success', '📊 Interactive Skill Visualization Activated!');
+        addLine('output', '');
+        addLine('output', '   Features:');
+        addLine('output', '   • Force-directed graph of 23+ skills');
+        addLine('output', '   • Interactive hover & click details');
+        addLine('output', '   • Filter by category or project');
+        addLine('output', '   • Timeline animation (2021-2025)');
+        addLine('output', '   • Real-time statistics panel');
+        addLine('info', '');
+        addLine('info', '💡 Tip: Click nodes to see connected projects!');
+        addLine('info', '');
+        handleNavigate('skills-network');
+        break;
+
       case 'playground':
       case 'play':
         addLine('info', '');
@@ -847,10 +872,11 @@ export default function Terminal({ isOpen, onToggle, onNavigate, onThemeToggle, 
           addLine('output', '├── index.tsx       (Home)');
           addLine('output', '├── about.md        (About)');
           addLine('output', '├── skills.json     (Skills)');
+          addLine('output', '├── skills-network.tsx (Skills Network) 🧠 NEW!');
           addLine('output', '├── projects/       (Projects)');
           addLine('output', '├── experience.log  (Experience)');
           addLine('output', '├── achievements.yaml (Achievements)');
-          addLine('output', '├── games/          (Games Playground) 🎮 NEW!');
+          addLine('output', '├── games/          (Games Playground) 🎮');
           addLine('output', '├── contact.tsx     (Contact)');
           addLine('output', '└── media/          (Gallery)');
         }
@@ -891,6 +917,10 @@ export default function Terminal({ isOpen, onToggle, onNavigate, onThemeToggle, 
           addLine('output', `🤖 AI/ML:      ${skills.ai_ml.join(' • ')}`);
           addLine('info', '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
           addLine('info', '');
+          addLine('info', '💡 Try "network" for interactive skills visualization!');
+          addLine('info', '');
+        } else if (args[0] === '--network') {
+          handleNavigate('skills-network');
         }
         break;
 

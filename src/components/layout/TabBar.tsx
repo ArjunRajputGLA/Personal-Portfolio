@@ -20,6 +20,7 @@ const tabConfig: Tab[] = [
   { id: 'home', label: 'index.tsx', icon: '📄', isModified: true },
   { id: 'about', label: 'about.md', icon: '📝' },
   { id: 'skills', label: 'skills.json', icon: '📋' },
+  { id: 'skills-network', label: 'skills-network.tsx', icon: '🧠' },
   { id: 'projects', label: 'projects/', icon: '📁' },
   { id: 'experience', label: 'experience.log', icon: '📜' },
   { id: 'achievements', label: 'achievements.yaml', icon: '🏆' },

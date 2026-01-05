@@ -141,7 +141,7 @@ export default function VoiceModal({
 
   return (
     <div 
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 backdrop-blur-sm animate-in fade-in duration-200"
+      className="fixed inset-0 z-[10100] flex items-center justify-center bg-black/85 backdrop-blur-sm animate-in fade-in duration-200"
       role="dialog"
       aria-modal="true"
       aria-label="Voice Control"

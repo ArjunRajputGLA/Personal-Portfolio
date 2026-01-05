@@ -14,7 +14,7 @@ interface Collaborator {
   activity: string;
 }
 
-const generateCollaborators = (): Collaborator[] => {
+const generateCollaborators = (width: number, height: number): Collaborator[] => {
   const names = ['Recruiter', 'HR Manager', 'Tech Lead', 'CEO', 'Investor', 'Visitor'];
   const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD'];
   const sections = ['hero', 'about', 'skills', 'projects', 'experience', 'contact'];
@@ -34,8 +34,8 @@ const generateCollaborators = (): Collaborator[] => {
     avatar: names[i % names.length].charAt(0),
     color: colors[i % colors.length],
     cursor: {
-      x: Math.random() * window.innerWidth,
-      y: Math.random() * window.innerHeight,
+      x: Math.random() * width,
+      y: Math.random() * height,
     },
     section: sections[Math.floor(Math.random() * sections.length)],
     activity: activities[i % activities.length],
@@ -47,10 +47,14 @@ export default function LiveCollaboration() {
   const [isExpanded, setIsExpanded] = useState(false);
   const [showCursors, setShowCursors] = useState(false);
   const [viewerCount, setViewerCount] = useState(0);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    // Initialize collaborators
-    setCollaborators(generateCollaborators());
+    // Mark as mounted to prevent hydration mismatch
+    setIsMounted(true);
+    
+    // Initialize collaborators only on client side
+    setCollaborators(generateCollaborators(window.innerWidth, window.innerHeight));
     setViewerCount(Math.floor(Math.random() * 10) + 5);
 
     // Update collaborators periodically
@@ -79,10 +83,15 @@ export default function LiveCollaboration() {
     };
   }, []);
 
+  // Don't render anything on server to prevent hydration mismatch
+  if (!isMounted) {
+    return null;
+  }
+
   return (
     <>
       {/* Live Indicator in Status Bar Area */}
-      <div className="fixed bottom-[22px] right-[200px] z-50">
+      <div className="fixed bottom-[22px] right-[200px] z-[9997]">
         <motion.button
           onClick={() => setIsExpanded(!isExpanded)}
           className="flex items-center gap-2 px-3 py-1 bg-[var(--vscode-sidebar)] border border-[var(--vscode-border)] rounded-t hover:bg-[var(--vscode-line-highlight)] transition-colors"
@@ -187,7 +196,7 @@ export default function LiveCollaboration() {
             }}
             exit={{ opacity: 0, scale: 0 }}
             transition={{ type: 'spring', stiffness: 100 }}
-            className="fixed pointer-events-none z-[100]"
+            className="fixed pointer-events-none z-[9996]"
             style={{ left: 0, top: 0 }}
           >
             <svg width="20" height="20" viewBox="0 0 20 20">

@@ -1,6 +1,8 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Mic, Sparkles } from 'lucide-react';
 import VoiceButton from './VoiceButton';
 import VoiceModal from './VoiceModal';
 import VoiceHelpModal from './VoiceHelpModal';
@@ -40,19 +42,26 @@ export default function VoiceControl({
   onExternalOpenChange,
 }: VoiceControlProps) {
   const [internalModalOpen, setInternalModalOpen] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   const isModalOpen = externalOpen !== undefined ? externalOpen : internalModalOpen;
-  const setIsModalOpen = (open: boolean) => {
+  const setIsModalOpen = useCallback((open: boolean) => {
     if (onExternalOpenChange) {
       onExternalOpenChange(open);
     } else {
       setInternalModalOpen(open);
     }
-  };
+  }, [onExternalOpenChange]);
   const [isHelpOpen, setIsHelpOpen] = useState(false);
   const [recentCommands, setRecentCommands] = useState<RecentCommand[]>([]);
   const [lastResponse, setLastResponse] = useState<string | null>(null);
+  const lastProcessedTranscript = useRef<string | null>(null);
   
   const speechState = useSpeechRecognition();
+
+  // Mark as mounted on client to prevent hydration mismatch
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   // Execute command action
   const executeAction = useCallback((action: string, response: string) => {
@@ -96,12 +105,18 @@ export default function VoiceControl({
       speak(response).catch(console.error);
       setLastResponse(response);
     }
-  }, [onNavigate, onOpenTerminal, onOpenChatbot, onOpenSettings, onOpenCommandPalette, onToggleTheme, onDownloadResume, speechState, voiceResponseEnabled]);
+  }, [onNavigate, onOpenTerminal, onOpenChatbot, onOpenSettings, onOpenCommandPalette, onToggleTheme, onDownloadResume, speechState, voiceResponseEnabled, setIsModalOpen]);
 
   // Process transcript when it changes
   useEffect(() => {
     if (speechState.status === 'processing' && speechState.transcript) {
       const transcript = speechState.transcript.toLowerCase().trim();
+      
+      // Prevent processing the same transcript multiple times
+      if (lastProcessedTranscript.current === transcript) {
+        return;
+      }
+      lastProcessedTranscript.current = transcript;
       
       // Try to find a matching command
       let matchedCommand: VoiceCommand | null = null;
@@ -122,48 +137,58 @@ export default function VoiceControl({
       }
 
       if (matchedCommand) {
-        // Add to recent commands
-        setRecentCommands(prev => [
-          { text: speechState.transcript, success: true },
-          ...prev.slice(0, 4)
-        ]);
+        // Add to recent commands - use queueMicrotask to avoid synchronous setState in effect
+        queueMicrotask(() => {
+          setRecentCommands(prev => [
+            { text: speechState.transcript, success: true },
+            ...prev.slice(0, 4)
+          ]);
+        });
 
-        // Execute the command
-        executeAction(matchedCommand.action, matchedCommand.response);
+        // Execute the command - use queueMicrotask to avoid synchronous setState in effect
+        queueMicrotask(() => {
+          executeAction(matchedCommand.action, matchedCommand.response);
+        });
         
         // Reset and close modal after a short delay (for feedback)
         setTimeout(() => {
           speechState.resetTranscript();
+          lastProcessedTranscript.current = null;
           // Auto-close modal after successful command (except for help)
           if (matchedCommand?.action !== 'system:help') {
             setTimeout(() => setIsModalOpen(false), 1000);
           }
         }, 500);
       } else {
-        // No match found
-        setRecentCommands(prev => [
-          { text: speechState.transcript, success: false },
-          ...prev.slice(0, 4)
-        ]);
+        // No match found - use queueMicrotask to avoid synchronous setState in effect
+        queueMicrotask(() => {
+          setRecentCommands(prev => [
+            { text: speechState.transcript, success: false },
+            ...prev.slice(0, 4)
+          ]);
+        });
 
         const errorResponse = "Sorry, I didn't understand that. Try saying 'help' to see available commands.";
         if (voiceResponseEnabled) {
           speak(errorResponse).catch(console.error);
         }
-        setLastResponse(errorResponse);
+        queueMicrotask(() => {
+          setLastResponse(errorResponse);
+        });
         
         setTimeout(() => {
           speechState.resetTranscript();
+          lastProcessedTranscript.current = null;
         }, 2000);
       }
     }
-  }, [speechState.status, speechState.transcript, executeAction, speechState, voiceResponseEnabled]);
+  }, [speechState.status, speechState.transcript, executeAction, speechState, voiceResponseEnabled, setIsModalOpen]);
 
   const handleButtonClick = useCallback(() => {
     if (speechState.isSupported) {
       setIsModalOpen(true);
     }
-  }, [speechState.isSupported]);
+  }, [speechState.isSupported, setIsModalOpen]);
 
   const handleStartListening = useCallback(() => {
     setLastResponse(null);
@@ -179,7 +204,7 @@ export default function VoiceControl({
     speechState.resetTranscript();
     setIsModalOpen(false);
     setLastResponse(null);
-  }, [speechState]);
+  }, [speechState, setIsModalOpen]);
 
   const handleShowHelp = useCallback(() => {
     setIsHelpOpen(true);
@@ -208,14 +233,61 @@ export default function VoiceControl({
         }
       }
     }, 300);
-  }, [executeAction]);
+  }, [executeAction, setIsModalOpen]);
 
-  if (!voiceEnabled) {
+  // Don't render until mounted to prevent hydration mismatch
+  if (!voiceEnabled || !isMounted) {
     return null;
   }
 
   return (
     <>
+      {/* Floating Voice Control Button - positioned above chatbot */}
+      <AnimatePresence>
+        {!isModalOpen && (
+          <motion.button
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0, opacity: 0 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={handleButtonClick}
+            disabled={!speechState.isSupported}
+            className={`fixed bottom-[170px] right-4 z-[9998] flex items-center gap-2 px-2 py-3 rounded-full shadow-lg hover:shadow-xl transition-all group ${
+              speechState.isSupported
+                ? 'bg-gradient-to-r from-purple-600 to-[var(--vscode-accent)] text-white cursor-pointer'
+                : 'bg-gray-600 text-gray-400 cursor-not-allowed opacity-50'
+            }`}
+            aria-label={speechState.isSupported ? 'Voice Control' : 'Voice control not supported'}
+            title={speechState.isSupported ? 'Voice Control (Alt+V)' : 'Voice control not supported in this browser'}
+          >
+            {speechState.isListening ? (
+              <>
+                <span className="relative flex h-5 w-5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-5 w-5 bg-red-500 items-center justify-center">
+                    <Mic size={14} className="text-white" />
+                  </span>
+                </span>
+                <span className="font-medium">Listening...</span>
+              </>
+            ) : (
+              <>
+                <Mic size={20} className={speechState.isSupported ? 'group-hover:scale-110 transition-transform' : ''} />
+                <span className="font-medium">Voice Control</span>
+                {speechState.isSupported && (
+                  <Sparkles size={16} className="opacity-70 group-hover:opacity-100 transition-opacity" />
+                )}
+              </>
+            )}
+            {/* Pulse indicator for supported browsers */}
+            {speechState.isSupported && !isModalOpen && (
+              <span className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full animate-pulse" />
+            )}
+          </motion.button>
+        )}
+      </AnimatePresence>
+
       {/* Voice Button for Status Bar */}
       <VoiceButton
         isListening={speechState.isListening}

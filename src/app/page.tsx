@@ -29,11 +29,13 @@ import LiveCollaboration from '@/components/ui/LiveCollaboration';
 import MatrixEffect from '@/components/ui/MatrixEffect';
 import Chatbot from '@/components/ui/Chatbot';
 import VoiceControl from '@/components/VoiceControl';
+import SkillsNetworkSection from '@/components/SkillsNetwork/SkillsNetworkSection';
 
 const sectionToBreadcrumb: { [key: string]: string[] } = {
   home: ['src', 'index.tsx'],
   about: ['src', 'about.md'],
   skills: ['src', 'skills.json'],
+  'skills-network': ['src', 'skills-network.tsx'],
   projects: ['src', 'projects'],
   experience: ['src', 'experience.log'],
   achievements: ['src', 'achievements.yaml'],
@@ -446,6 +448,7 @@ function PortfolioContent() {
           <HeroSection />
           <AboutSection />
           <SkillsSection />
+          <SkillsNetworkSection />
           <ProjectsSection />
           <ExperienceSection />
           <AchievementsSection />

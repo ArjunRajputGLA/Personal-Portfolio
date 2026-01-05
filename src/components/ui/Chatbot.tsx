@@ -494,7 +494,7 @@ export default function Chatbot({ externalOpen, onExternalOpenChange }: ChatbotP
         left: '20px',
         width: 'calc(100vw - 40px)',
         height: 'calc(100vh - 40px)',
-        zIndex: 9999,
+        zIndex: 9998,
       };
     }
     
@@ -507,7 +507,7 @@ export default function Chatbot({ externalOpen, onExternalOpenChange }: ChatbotP
         bottom: 0,
         width: '100%',
         height: '100%',
-        zIndex: 9999,
+        zIndex: 9998,
       };
     }
     
@@ -517,7 +517,7 @@ export default function Chatbot({ externalOpen, onExternalOpenChange }: ChatbotP
       top: `${position.y}px`,
       width: `${size.width}px`,
       height: `${size.height}px`,
-      zIndex: 9999,
+      zIndex: 9998,
     };
   };
 
@@ -533,7 +533,7 @@ export default function Chatbot({ externalOpen, onExternalOpenChange }: ChatbotP
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setIsOpen(true)}
-            className="fixed bottom-24 right-4 z-50 flex items-center gap-2 px-4 py-3 bg-gradient-to-r from-[var(--vscode-accent)] to-blue-600 text-white rounded-full shadow-lg hover:shadow-xl transition-shadow group"
+            className="fixed bottom-24 right-4 z-[9998] flex items-center gap-2 px-4 py-3 bg-gradient-to-r from-[var(--vscode-accent)] to-blue-600 text-white rounded-full shadow-lg hover:shadow-xl transition-shadow group"
             aria-label="Open chat with Arjun AI"
           >
             {showPulse && (
@@ -554,7 +554,7 @@ export default function Chatbot({ externalOpen, onExternalOpenChange }: ChatbotP
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
             onClick={() => setIsMinimized(false)}
-            className="fixed bottom-24 right-4 z-50 flex items-center gap-3 px-4 py-3 bg-[var(--vscode-sidebar)] border border-[var(--vscode-border)] rounded-lg shadow-xl hover:border-[var(--vscode-accent)] transition-all cursor-pointer"
+            className="fixed bottom-24 right-4 z-[9998] flex items-center gap-3 px-4 py-3 bg-[var(--vscode-sidebar)] border border-[var(--vscode-border)] rounded-lg shadow-xl hover:border-[var(--vscode-accent)] transition-all cursor-pointer"
             aria-label="Restore Arjun AI chat"
           >
             <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[var(--vscode-accent)] to-blue-600 flex items-center justify-center">

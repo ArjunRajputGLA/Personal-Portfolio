@@ -132,7 +132,7 @@ export default function NotificationSystem({ notifications, onDismiss }: Notific
   };
 
   return (
-    <div className="fixed bottom-[30px] right-4 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none">
+    <div className="fixed bottom-[30px] right-4 z-[9997] flex flex-col gap-2 max-w-sm w-full pointer-events-none">
       <AnimatePresence mode="popLayout">
         {notifications.map((notification) => (
           <motion.div

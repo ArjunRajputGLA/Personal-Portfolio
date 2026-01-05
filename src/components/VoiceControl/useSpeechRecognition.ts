@@ -69,17 +69,25 @@ declare global {
   }
 }
 
+// Helper function to check browser support
+const checkSpeechRecognitionSupport = (): boolean => {
+  if (typeof window === 'undefined') return false;
+  return !!(window.SpeechRecognition || window.webkitSpeechRecognition);
+};
+
 export function useSpeechRecognition(): SpeechRecognitionHook {
-  const [state, setState] = useState<SpeechRecognitionState>({
+  // Initialize with isSupported: false to match server render
+  // We'll update it in useEffect on client
+  const [state, setState] = useState<SpeechRecognitionState>(() => ({
     isListening: false,
-    isSupported: false,
+    isSupported: false, // Always start as false to prevent hydration mismatch
     transcript: '',
     interimTranscript: '',
     confidence: 0,
     error: null,
     status: 'idle',
     audioLevel: 0,
-  });
+  }));
 
   const recognitionRef = useRef<SpeechRecognitionInstance | null>(null);
   const isInitializedRef = useRef(false);
@@ -88,12 +96,13 @@ export function useSpeechRecognition(): SpeechRecognitionHook {
   const streamRef = useRef<MediaStream | null>(null);
   const animationFrameRef = useRef<number | null>(null);
 
-  // Check browser support on mount
+  // Initialize speech recognition on mount
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
       const isSupported = !!SpeechRecognition;
       
+      // Update isSupported state on client
       setState(prev => ({ ...prev, isSupported }));
       
       if (isSupported && !isInitializedRef.current) {
