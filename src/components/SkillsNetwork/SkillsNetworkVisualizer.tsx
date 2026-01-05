@@ -180,6 +180,47 @@ export default function SkillsNetworkVisualizer() {
     return () => clearInterval(interval);
   }, [isPlaying, isTrainingMode]);
 
+  // Keyboard shortcuts for zoom controls
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Don't trigger shortcuts when typing in input fields
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
+        return;
+      }
+      
+      switch (e.key) {
+        case '+':
+        case '=':
+          e.preventDefault();
+          if (graphRef.current) {
+            const currentZoom = graphRef.current.zoom();
+            graphRef.current.zoom(Math.min(currentZoom * 1.5, 4), 300);
+          }
+          break;
+        case '-':
+        case '_':
+          e.preventDefault();
+          if (graphRef.current) {
+            const currentZoom = graphRef.current.zoom();
+            graphRef.current.zoom(Math.max(currentZoom / 1.5, 0.3), 300);
+          }
+          break;
+        case 'r':
+        case 'R':
+          if (!e.ctrlKey && !e.metaKey) {
+            e.preventDefault();
+            if (graphRef.current) {
+              graphRef.current.zoomToFit(400, 60);
+            }
+          }
+          break;
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
   // Filter data based on active filters and training mode
   // Keep all nodes in the graph but track which ones are visible
   const { graphData, visibleNodeIds, visibleLinkIds } = useMemo(() => {
@@ -272,11 +313,11 @@ export default function SkillsNetworkVisualizer() {
     setSelectedNode(null);
   }, []);
 
-  // Reset view
+  // Reset view - zoom to fit all visible nodes
   const resetView = useCallback(() => {
     if (graphRef.current) {
-      graphRef.current.centerAt(0, 0, 1000);
-      graphRef.current.zoom(1, 1000);
+      // Use zoomToFit to show all nodes with padding
+      graphRef.current.zoomToFit(400, 60);
     }
     setSelectedNode(null);
     setHoveredNode(null);
@@ -477,7 +518,7 @@ export default function SkillsNetworkVisualizer() {
             initial={{ x: -300, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: -300, opacity: 0 }}
-            className="absolute top-16 left-4 z-20 w-64 bg-[var(--vscode-sidebar)] border border-[var(--vscode-border)] rounded-lg shadow-xl overflow-hidden"
+            className="absolute top-16 left-4 z-20 w-64 bg-[var(--vscode-sidebar)] border border-[var(--vscode-border)] rounded-lg shadow-xl overflow-hidden max-h-[calc(100vh-200px)] overflow-y-auto"
           >
             <div className="p-4 border-b border-[var(--vscode-border)]">
               <h3 className="text-sm font-semibold text-[var(--vscode-text)] flex items-center gap-2">
@@ -694,43 +735,49 @@ export default function SkillsNetworkVisualizer() {
       <div className="absolute bottom-4 right-4 z-20 flex flex-col gap-2">
         <button
           onClick={handleZoomIn}
-          className="p-2 bg-[var(--vscode-sidebar)] border border-[var(--vscode-border)] rounded-lg text-[var(--vscode-text)] hover:border-[var(--vscode-accent)] transition-colors"
-          title="Zoom In"
+          className="p-2 bg-[var(--vscode-sidebar)] border border-[var(--vscode-border)] rounded-lg text-[var(--vscode-text)] hover:border-[var(--vscode-accent)] hover:bg-[var(--vscode-line-highlight)] transition-colors active:scale-95"
+          title="Zoom In (+)"
+          aria-label="Zoom in on the network graph"
         >
           <ZoomIn className="w-5 h-5" />
         </button>
         <button
           onClick={handleZoomOut}
-          className="p-2 bg-[var(--vscode-sidebar)] border border-[var(--vscode-border)] rounded-lg text-[var(--vscode-text)] hover:border-[var(--vscode-accent)] transition-colors"
-          title="Zoom Out"
+          className="p-2 bg-[var(--vscode-sidebar)] border border-[var(--vscode-border)] rounded-lg text-[var(--vscode-text)] hover:border-[var(--vscode-accent)] hover:bg-[var(--vscode-line-highlight)] transition-colors active:scale-95"
+          title="Zoom Out (-)"
+          aria-label="Zoom out on the network graph"
         >
           <ZoomOut className="w-5 h-5" />
         </button>
         <button
           onClick={resetView}
-          className="p-2 bg-[var(--vscode-sidebar)] border border-[var(--vscode-border)] rounded-lg text-[var(--vscode-text)] hover:border-[var(--vscode-accent)] transition-colors"
-          title="Reset View"
+          className="p-2 bg-[var(--vscode-sidebar)] border border-[var(--vscode-border)] rounded-lg text-[var(--vscode-text)] hover:border-[var(--vscode-accent)] hover:bg-[var(--vscode-line-highlight)] transition-colors active:scale-95"
+          title="Reset View (R)"
+          aria-label="Reset view and fit all nodes"
         >
           <RotateCcw className="w-5 h-5" />
         </button>
       </div>
 
-      {/* Category Legend */}
-      {/* Category Legend - Fixed bottom-left with proper spacing */}
-      <div className="absolute bottom-4 left-4 z-20 flex flex-wrap gap-1.5 max-w-[280px] p-2 bg-[var(--vscode-sidebar)]/95 border border-[var(--vscode-border)] rounded-lg backdrop-blur-sm">
+      {/* Category Legend - Positioned to avoid overlap with Control Panel */}
+      <div className={`absolute bottom-4 z-20 flex flex-wrap gap-1.5 max-w-[300px] p-2 bg-[var(--vscode-sidebar)]/95 border border-[var(--vscode-border)] rounded-lg backdrop-blur-sm transition-all duration-300 ${
+        showControls ? 'left-[280px]' : 'left-4'
+      }`}>
         {Object.entries(categoryInfo).map(([key, info]) => (
-          <div
+          <button
             key={key}
-            className={`flex items-center gap-1.5 px-2 py-1 bg-[var(--vscode-bg)]/80 border border-[var(--vscode-border)] rounded text-[10px] transition-all whitespace-nowrap ${
+            onClick={() => toggleCategory(key)}
+            className={`flex items-center gap-1.5 px-2 py-1 bg-[var(--vscode-bg)]/80 border border-[var(--vscode-border)] rounded text-[10px] transition-all whitespace-nowrap cursor-pointer hover:border-[var(--vscode-accent)] ${
               filters.categories.includes(key) ? 'opacity-100 border-[var(--vscode-accent)]/30' : 'opacity-40'
             }`}
+            title={`Toggle ${info.label}`}
           >
             <span 
               className="w-2 h-2 rounded-full flex-shrink-0"
               style={{ backgroundColor: info.color }}
             />
             <span className="text-[var(--vscode-text)] truncate">{info.label}</span>
-          </div>
+          </button>
         ))}
       </div>
 
