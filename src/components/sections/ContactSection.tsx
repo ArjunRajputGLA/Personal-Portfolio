@@ -21,7 +21,7 @@ export default function ContactSection() {
     social: {
       linkedin: "linkedin.com/in/imstorm23203attherategmail",
       github: "github.com/ArjunRajputGLA",
-      leetcode: "leetcode.com/u/CodeXI"
+      leetcode: "leetcode.com/u/arjun2k4"
     },
     status: "🟢 Available for opportunities",
     responseTime: "< 24 hours"

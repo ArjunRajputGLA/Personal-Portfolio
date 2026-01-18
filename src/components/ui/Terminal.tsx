@@ -266,7 +266,7 @@ const skills = {
 const socialLinks = {
   github: 'https://github.com/ArjunRajputGLA',
   linkedin: 'https://www.linkedin.com/in/imstorm23203attherategmail/',
-  leetcode: 'https://leetcode.com/u/CodeXI/',
+  leetcode: 'https://leetcode.com/u/arjun2k4/',
   email: 'imstorm23203@gmail.com'
 };
 

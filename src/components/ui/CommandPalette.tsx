@@ -231,7 +231,7 @@ export default function CommandPalette({
     }
     // Handle LeetCode
     else if (cmd.id === 'view-leetcode' || cmd.id === 'action-leetcode') {
-      window.open('https://leetcode.com/u/CodeXI/', '_blank');
+      window.open('https://leetcode.com/u/arjun2k4/', '_blank');
     }
     // Handle copy email
     else if (cmd.id === 'copy-email' || cmd.id === 'action-copy-email') {

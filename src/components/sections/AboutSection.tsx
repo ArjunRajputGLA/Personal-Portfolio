@@ -126,7 +126,7 @@ export default function AboutSection() {
                     <a href="https://github.com/ArjunRajputGLA" target="_blank" rel="noopener noreferrer" className="block text-[var(--vscode-accent)] hover:underline">
                       → GitHub
                     </a>
-                    <a href="https://leetcode.com/u/CodeXI/" target="_blank" rel="noopener noreferrer" className="block text-[var(--vscode-accent)] hover:underline">
+                    <a href="https://leetcode.com/u/arjun2k4/" target="_blank" rel="noopener noreferrer" className="block text-[var(--vscode-accent)] hover:underline">
                       → LeetCode
                     </a>
                   </div>

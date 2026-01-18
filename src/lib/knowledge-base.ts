@@ -30,7 +30,7 @@ export const knowledgeBase: KnowledgeDocument[] = [
 - Project Intern at IIIT Kottayam (May-July 2025) - NLP-based malware detection
 - Project Trainee at AcmeGrade (Jan-Mar 2024) - Data Science projects
 
-**Coding Profile:** 700+ problems solved on LeetCode (username: CodeXI)
+**Coding Profile:** 700+ problems solved on LeetCode (username: arjun2k4)
 
 **Certifications:** Intel UNNATI Programme (2024 & 2025), NEC Corporation
 
@@ -348,7 +348,7 @@ A desktop application that helps users manage system files efficiently using AI-
 | HTML/CSS | Advanced | Frontend styling |
 
 **Evidence of Expertise:**
-- 700+ problems solved on LeetCode (username: CodeXI)
+- 700+ problems solved on LeetCode (username: arjun2k4)
 - Built multiple production projects in Python and JavaScript
 - Used Python extensively at IIIT Kottayam internship for ML models`
   },
@@ -463,7 +463,7 @@ A desktop application that helps users manage system files efficiently using AI-
 • Git, VS Code, GitHub, Streamlit
 
 **📊 PROOF:**
-• 700+ LeetCode problems (CodeXI)
+• 700+ LeetCode problems (arjun2k4)
 • 7+ production projects
 • Intel certified AI projects`
   },
@@ -484,7 +484,7 @@ A desktop application that helps users manage system files efficiently using AI-
 
 **Profiles:**
 - GitHub: github.com/ArjunRajputGLA
-- LeetCode: leetcode.com/u/CodeXI (700+ problems)`
+- LeetCode: leetcode.com/u/arjun2k4 (700+ problems)`
   },
   {
     id: 'skills-soft',
@@ -533,7 +533,7 @@ A desktop application that helps users manage system files efficiently using AI-
     keywords: ['leetcode', 'coding', 'problems', '700', 'competitive', 'dsa', 'algorithm'],
     content: `**💻 LeetCode Achievement: 700+ Problems Solved**
 
-**Profile:** leetcode.com/u/CodeXI
+**Profile:** leetcode.com/u/arjun2k4
 
 **Statistics:**
 - Total Problems: 700+ solved
@@ -615,7 +615,7 @@ Arjun holds a certification from NEC Corporation, a global leader in IT and netw
 **💻 CODING:**
 2. **LeetCode Master**
    - Problems Solved: 700+
-   - Profile: CodeXI
+   - Profile: arjun2k4
    - Skills: DSA, Algorithms
 
 **🎓 CERTIFICATIONS:**
@@ -675,7 +675,7 @@ Arjun holds a certification from NEC Corporation, a global leader in IT and netw
     id: 'contact-leetcode',
     category: 'contact',
     keywords: ['leetcode', 'profile', 'coding'],
-    content: `Visit Arjun's LeetCode profile at https://leetcode.com/u/CodeXI/ to see his problem-solving journey with 700+ solved problems.`
+    content: `Visit Arjun's LeetCode profile at https://leetcode.com/u/arjun2k4/ to see his problem-solving journey with 700+ solved problems.`
   },
 
   // Availability & Interests

@@ -5,7 +5,7 @@ export const resumeData = {
     email: "imstorm23203@gmail.com",
     linkedin: "https://www.linkedin.com/in/imstorm23203attherategmail/",
     github: "https://github.com/ArjunRajputGLA",
-    leetcode: "https://leetcode.com/u/CodeXI/",
+    leetcode: "https://leetcode.com/u/arjun2k4/",
     currentStatus: "B.Tech Student at GLA University (Expected April 2027)"
   },
   
@@ -134,7 +134,7 @@ export const resumeData = {
     {
       title: "LeetCode Problem Solver",
       count: "700+",
-      profile: "https://leetcode.com/u/CodeXI/",
+      profile: "https://leetcode.com/u/arjun2k4/",
       description: "Solved 700+ coding problems demonstrating strong algorithmic thinking"
     },
     {

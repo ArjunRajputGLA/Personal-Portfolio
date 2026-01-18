@@ -27,7 +27,7 @@ const achievements: Achievement[] = [
     details: {
       platform: 'LeetCode',
       problems_solved: 700,
-      profile_url: 'https://leetcode.com/u/CodeXI/'
+      profile_url: 'https://leetcode.com/u/arjun2k4/'
     },
     icon: '💻',
     priority: 'high'

@@ -347,7 +347,7 @@ Which project interests you? I can share more details!`;
 | **HTML/CSS** | Advanced | Frontend styling |
 
 **Proof of Expertise:**
-• 700+ LeetCode problems solved (CodeXI)
+• 700+ LeetCode problems solved (arjun2k4)
 • Production projects in Python & JavaScript
 • PyTorch models at IIIT Kottayam internship
 
@@ -438,7 +438,7 @@ PyTorch, Scikit-Learn, NLP, Deep Learning, Computer Vision
 **Tools:**
 Git, VS Code, GitHub
 
-**DSA:** 700+ LeetCode problems (CodeXI)
+**DSA:** 700+ LeetCode problems (arjun2k4)
 
 **Certifications:** Intel UNNATI (2024 & 2025), NEC
 
@@ -468,7 +468,7 @@ Which area would you like details on?`;
         if (lowerQuery.match(/leetcode|coding|problems|dsa|algorithm/)) {
           return `**💻 LeetCode Achievement**
 
-**Profile:** leetcode.com/u/CodeXI
+**Profile:** leetcode.com/u/arjun2k4
 **Problems Solved:** 700+
 **Languages:** Python, Java, JavaScript
 
@@ -510,7 +510,7 @@ Two certifications = Consistently recognized for AI innovation!`;
 
 **2. LeetCode Master**
 • 700+ problems solved
-• Profile: CodeXI
+• Profile: arjun2k4
 • Strong DSA skills
 
 **3. Intel Certified (x2)**
@@ -533,7 +533,7 @@ Which achievement interests you most?`;
 **Professional Profiles:**
 • 💼 LinkedIn: linkedin.com/in/imstorm23203attherategmail
 • 💻 GitHub: github.com/ArjunRajputGLA
-• 🧩 LeetCode: leetcode.com/u/CodeXI
+• 🧩 LeetCode: leetcode.com/u/arjun2k4
 
 **Location:** Mathura, India
 
@@ -777,7 +777,7 @@ B.Tech CS at GLA University (April 2027)
 
 **🏆 Key Achievements:**
 • National Hackathon Winner - Pan IIT Alumni Imagine 2025
-• 700+ LeetCode problems (CodeXI)
+• 700+ LeetCode problems (arjun2k4)
 • Intel UNNATI Certified (2024 & 2025)
 
 **💻 Tech Stack:**
